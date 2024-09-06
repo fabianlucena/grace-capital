@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, Pressable, Text, TextInput } from 'react-native';
 import styles from '../libs/styles';
 import LocaleText from '../components/LocaleText';
-import LocaleHeader from '../components/LocaleHeader';
 import Background from '../components/Background';
 import Field from '../components/Field';
 import PurposeService from '../services/purpose';
@@ -41,7 +40,6 @@ export default function PurposeScreen({navigation, route}) {
   return (
     <Background>
       <View style={styles.container}>
-        <LocaleHeader>Purpose</LocaleHeader>
         <Field>
           <LocaleText>Description</LocaleText>
           <TextInput

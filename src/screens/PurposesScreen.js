@@ -3,7 +3,6 @@ import { View, FlatList, Text, Switch } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
 import styles from '../libs/styles';
 import { confirm } from '../libs/confirm';
-import LocaleHeader from '../components/LocaleHeader';
 import Background from '../components/Background';
 import PurposeService from '../services/purpose';
 import AddButtonIcon from '../components/AddButtonIcon';
@@ -45,7 +44,6 @@ export default function PurposesScreen({navigation}) {
     <Background>
       <View style={{ ...styles.container }}>
         <AddButtonIcon style={{ ...styles.floatTopLeft, ...styles.gigaIcon }} onPress={() => navigation.navigate('Purpose')} />
-        <LocaleHeader>Purposes</LocaleHeader>
         <FlatList
           style={styles.list}
           data={purposes}
