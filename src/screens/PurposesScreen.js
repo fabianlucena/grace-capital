@@ -43,9 +43,9 @@ export default function PurposesScreen({navigation}) {
 
   return (
     <Background>
-      <View style={styles.container}>
+      <View style={{ ...styles.container }}>
+        <AddButtonIcon style={{ ...styles.floatTopLeft, ...styles.gigaIcon }} onPress={() => navigation.navigate('Purpose')} />
         <LocaleText>Purposes</LocaleText>
-        <AddButtonIcon style={{ ...styles.floatTopLeft, ...styles.bigIcon }} onPress={() => navigation.navigate('Purpose')} />
         <FlatList
           style={styles.list}
           data={purposes}

@@ -5,6 +5,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flexGrow: 1,
+  },
+
+  background: {
+    flexGrow: 1,
   },
 
   button: {
@@ -37,8 +42,13 @@ const styles = StyleSheet.create({
   },
 
   bigIcon: {
-    width: 24,
-    resizeMode: 'contain',
+    width: 36,
+    height: 36,
+  },
+
+  gigaIcon: {
+    width: 54,
+    height: 54,
   },
 
   list: {
@@ -69,8 +79,12 @@ const styles = StyleSheet.create({
 
   floatTopLeft: {
     position: 'absolute',
-    left: 0,
-    top: -10,
+    right: 0,
+    bottom: 0,
+    zIndex: 2,
+    minWidth: 30,
+    minHeight: 30,
+    margin: 5,
   },
 });
 

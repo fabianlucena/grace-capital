@@ -1,6 +1,6 @@
 import ButtonIcon from './ButtonIcon';
 import _ from '../libs/locale';
-import deleteIcon from '../images/trash.svg';
+import deleteIcon from '../images/trash.png';
 
 export default function DeleteButtonIcon({style, onPress}) {
   return (

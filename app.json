@@ -4,10 +4,10 @@
     "slug": "GraceCapital",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/schoenstatt.svg",
+    "icon": "./assets/schoenstatt.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/schoenstatt.svg",
+      "image": "./assets/schoenstatt.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,12 +16,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/schoenstatt.svg",
+        "foregroundImage": "./assets/schoenstatt.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/schoenstatt.svg",
+      "favicon": "./assets/schoenstatt.png",
       "bundler": "metro"
     }
   }

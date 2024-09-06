@@ -1,20 +1,12 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+import styles from '../libs/styles';
 import GoMenu from './GoMenu';
 
 export default function Background({children}) {
   return (
-    <View style={styles.image}>
+    <View style={styles.background}>
       {/*<GoMenu />*/}
       {children}
     </View >
   );
 }
-
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#eeeeee',
-    width: '100%',
-  },
-});

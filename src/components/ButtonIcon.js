@@ -5,6 +5,7 @@ export default function ButtonIcon({style, onPress, alt, source}) {
   return (
     <Pressable 
       onPress={onPress}
+      style={{...style}}
     >
       <Image
         alt={alt}
