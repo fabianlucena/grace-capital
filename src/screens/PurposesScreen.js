@@ -4,10 +4,12 @@ import { useIsFocused } from "@react-navigation/native";
 import styles from '../libs/styles';
 import { confirm } from '../libs/confirm';
 import Background from '../components/Background';
-import PurposeService from '../services/purpose';
 import AddButtonIcon from '../components/AddButtonIcon';
 import DeleteButtonIcon from '../components/DeleteButtonIcon';
 import EditButtonIcon from '../components/EditButtonIcon';
+import getDependency from '../libs/dependency';
+
+const purposeService = getDependency('purposeService');
 
 export default function PurposesScreen({navigation}) {
   const [purposes, setPurposes] = useState([]);
@@ -16,7 +18,7 @@ export default function PurposesScreen({navigation}) {
   useEffect(load, [isFocused]);
 
   function load() {
-    PurposeService.getList()
+    purposeService.getList()
       .then(setPurposes);
   }
 
@@ -29,14 +31,14 @@ export default function PurposesScreen({navigation}) {
       title: 'Confirma',
       message: 'Confirma la eliminación del propósito',
       onOk: async () => {
-        await PurposeService.deleteForUuid(uuid);
+        await purposeService.deleteForUuid(uuid);
         load();
       },
     });
   }
 
   async function setIsCompletedForUuid(uuid, isCompleted) {
-    await PurposeService.updateForUuid(uuid, {isCompleted});
+    await purposeService.updateForUuid(uuid, {isCompleted});
     load();
   }
 

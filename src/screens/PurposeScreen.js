@@ -4,7 +4,9 @@ import styles from '../libs/styles';
 import LocaleText from '../components/LocaleText';
 import Background from '../components/Background';
 import Field from '../components/Field';
-import PurposeService from '../services/purpose';
+import getDependency from '../libs/dependency';
+
+const purposeService = getDependency('purposeService');
 
 export default function PurposeScreen({navigation, route}) {
   const [title, setTitle] = useState('');
@@ -21,7 +23,7 @@ export default function PurposeScreen({navigation, route}) {
   }, [route]);
 
   async function loadPurpose(uuid) {
-    const purpose = await PurposeService.getForUuid(uuid);
+    const purpose = await purposeService.getSingleOrNullForUuid(uuid);
     if (purpose) {
       setTitle(purpose.title);
     }
@@ -29,9 +31,9 @@ export default function PurposeScreen({navigation, route}) {
 
   async function addPurpuose() {
     if (uuid) {
-      await PurposeService.updateForUuid(uuid, {title});
+      await purposeService.updateForUuid(uuid, {title});
     } else {
-      await PurposeService.create({title});
+      await purposeService.create({title});
     }
 
     navigation.goBack();
