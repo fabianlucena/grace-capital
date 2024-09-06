@@ -1,11 +1,14 @@
+import '@expo/metro-runtime';
 import {NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import _ from './libs/locale';
-import MenuScreen from './screens/MenuScreen';
-import CalendarScreen from './screens/CalendarScreen';
-import CapitalaryScreen from './screens/CapitalaryScreen';
 import { Pressable } from 'react-native';
-import LocaleText from './components/LocaleText';
+import _ from './src/libs/locale';
+import LocaleText from './src/components/LocaleText';
+import MenuScreen from './src/screens/MenuScreen';
+import CalendarScreen from './src/screens/CalendarScreen';
+import CapitalaryScreen from './src/screens/CapitalaryScreen';
+import PurposeScreen from './src/screens/PurposeScreen';
+import PurposesScreen from './src/screens/PurposesScreen';
 
 const Stack = createNativeStackNavigator();
 const navigationRef = createNavigationContainerRef();
@@ -19,10 +22,12 @@ export default function App() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName='Calendar'>
-        <Stack.Screen name="Menu"       component={MenuScreen}       options={{             title: _`Menu` }}/>
-        <Stack.Screen name="Calendar"   component={CalendarScreen}   options={{headerRight, title: _`Calendar` }}/>
-        <Stack.Screen name="Capitalary" component={CapitalaryScreen} options={{headerRight, title: _`Capitalary` }}/>
+      <Stack.Navigator initialRouteName='Purposes'>
+        <Stack.Screen name="Menu"        component={MenuScreen}       options={{             title: _`Menu` }}/>
+        <Stack.Screen name="Calendar"    component={CalendarScreen}   options={{headerRight, title: _`Calendar` }}/>
+        <Stack.Screen name="Capitalary"  component={CapitalaryScreen} options={{headerRight, title: _`Capitalary` }}/>
+        <Stack.Screen name="Purposes"    component={PurposesScreen}   options={{headerRight, title: _`Purposes list` }}/>
+        <Stack.Screen name="Purpose"     component={PurposeScreen}    options={{headerRight, title: _`Purpose` }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

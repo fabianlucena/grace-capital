@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="10mm"
+   height="10mm"
+   viewBox="0 0 10 10"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:version="1.2-beta (1b65182ce9, 2022-04-05)"
+   sodipodi:docname="add.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="11.350552"
+     inkscape:cx="9.8673617"
+     inkscape:cy="15.505854"
+     inkscape:window-width="2560"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs2" /><g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"><g
+       id="g2131"
+       transform="matrix(0.1,0,0,0.1,-26.332819,-14.112001)"><circle
+         style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:20;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+         id="path1200"
+         cx="313.32819"
+         cy="191.12001"
+         r="50" /><g
+         id="g1146"
+         style="fill:none;stroke:#cccccc;stroke-width:18.4867;stroke-dasharray:none"
+         transform="matrix(0.81142838,0,0,0.81136098,47.34198,40.823501)"><path
+           style="fill:none;stroke:#cccccc;stroke-width:18.4867;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+           d="M 292.59999,185.24 H 363"
+           id="path353" /><path
+           style="fill:none;stroke:#cccccc;stroke-width:18.4867;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+           d="M 327.79999,150.03999 V 220.44"
+           id="path353-7" /></g></g></g></svg>

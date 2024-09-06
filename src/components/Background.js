@@ -1,12 +1,12 @@
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import GoMenu from './GoMenu';
 
 export default function Background({children}) {
   return (
-    <ImageBackground style={styles.image}>
-      <GoMenu />
+    <View style={styles.image}>
+      {/*<GoMenu />*/}
       {children}
-    </ImageBackground >
+    </View >
   );
 }
 

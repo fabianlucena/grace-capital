@@ -1,12 +1,12 @@
+import translations from './locale.es'
+
 export class Locale {
   _(text) {
-    switch (text) {
-      case 'Calendar':   return 'Calendario';
-      case 'Capitalary': return 'Capitalario';
-      case 'Menu':       return 'Menú';
+    if (typeof text !== 'string') {
+      return text;
     }
-
-    return text;
+    
+    return translations[text.trim()] ?? text;
   }
 }
 

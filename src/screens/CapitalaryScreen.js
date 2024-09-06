@@ -1,4 +1,5 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
+import styles from '../libs/styles';
 import LocaleText from '../components/LocaleText';
 import Background from '../components/Background';
 
@@ -11,11 +12,3 @@ export default function CapitalaryScreen({navigation}) {
     </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
