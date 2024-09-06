@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, FlatList, Text, Pressable, Alert, ImageComponent, Switch } from 'react-native';
+import { View, FlatList, Text, Switch } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
 import styles from '../libs/styles';
 import { confirm } from '../libs/confirm';

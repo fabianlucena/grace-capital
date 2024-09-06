@@ -2,8 +2,6 @@ import { Pressable, Image } from 'react-native';
 import styles from '../libs/styles';
 
 export default function ButtonIcon({style, onPress, alt, source}) {
-  console.log(source);
-
   return (
     <Pressable 
       onPress={onPress}
