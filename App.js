@@ -9,15 +9,14 @@ import CalendarScreen from './src/screens/CalendarScreen';
 import CapitalaryScreen from './src/screens/CapitalaryScreen';
 import PurposeScreen from './src/screens/PurposeScreen';
 import PurposesScreen from './src/screens/PurposesScreen';
+import MenuButtonIcon from './src/components/MenuButtonIcon';
 
 const Stack = createNativeStackNavigator();
 const navigationRef = createNavigationContainerRef();
 
 export default function App() {
   const headerRight = () => (
-    <Pressable onPress={() => navigationRef.isReady() && navigationRef.navigate('Menu')}>
-      <LocaleText>Menu</LocaleText>
-    </Pressable>
+    <MenuButtonIcon onPress={() => navigationRef.isReady() && navigationRef.navigate('Menu')} />
   );
 
   return (

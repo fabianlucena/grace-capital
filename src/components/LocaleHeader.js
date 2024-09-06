@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { loc } from '../libs/locale';
+import styles from '../libs/styles';
 
 export default function LocaleText({style, children}) {
   const [text, setText] = useState('');
@@ -9,5 +10,5 @@ export default function LocaleText({style, children}) {
     setText(loc._(children) || '');
   }, [children])
 
-  return (<Text style={style}>{text}</Text>);
+  return (<Text style={{ ...styles.header, ...style}}>{text}</Text>);
 }

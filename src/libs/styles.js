@@ -22,8 +22,14 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 
-  input: {
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 
+  input: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#404040',
   },
 
   icon: {
