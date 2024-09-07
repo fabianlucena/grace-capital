@@ -9,11 +9,14 @@ import DeleteButtonIcon from '../components/DeleteButtonIcon';
 import EditButtonIcon from '../components/EditButtonIcon';
 import getDependency from '../libs/dependency';
 
-const purposeService = getDependency('purposeService');
-
 export default function PurposesScreen({navigation}) {
   const [purposes, setPurposes] = useState([]);
   const isFocused = useIsFocused();
+  const [purposeService, setHurposeService] = useState();
+
+  useState(() => {
+    setHurposeService(getDependency('purposeService'));
+  }, []);
 
   useEffect(load, [isFocused]);
 

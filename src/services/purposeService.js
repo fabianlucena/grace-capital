@@ -1,8 +1,8 @@
 import uuid from 'react-native-uuid';
 
 class PurposeService {
-  constructor(db) {
-    this.db = db;
+  constructor(model) {
+    this.model = model;
   }
 
   async create(data) {
@@ -14,23 +14,23 @@ class PurposeService {
       data.uuid = uuid.v4();
     }
 
-    return this.db.create(data);
+    return this.model.create(data);
   }
 
   async getList() {
-    return this.db.getList();
+    return this.model.getList();
   }
 
   async getSingleOrNullForUuid(uuid) {
-    return this.db.getSingleOrNullFor({uuid});
+    return this.model.getSingleOrNullFor({uuid});
   }
 
   async updateForUuid(uuid, data) {
-    return this.db.updateFor({uuid}, data);
+    return this.model.updateFor({uuid}, data);
   }
 
   async deleteForUuid(uuid) {
-    return this.db.deleteFor({uuid});
+    return this.model.deleteFor({uuid});
   }
 };
 

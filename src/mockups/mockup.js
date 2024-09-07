@@ -1,17 +1,17 @@
 class Mockup {
-  mockup = [];
+  data = [];
 
   async create(data) {
-    this.mockup = [...this.mockup, data];
+    this.data = [...this.data, data];
     return data;
   }
 
   async getList() {
-    return this.mockup;
+    return this.data;
   }
 
   async getListFor(filters) {
-    return this.mockup.filter(item => {
+    return this.data.filter(item => {
       for(const f in filters) {
         if (item[f] != filters[f]) {
           return false;
@@ -37,7 +37,7 @@ class Mockup {
 
   async updateFor(filters, data) {
     let count = 0;
-    this.mockup = this.mockup.map(item => {
+    this.data = this.data.map(item => {
       for(const f in filters) {
         if (item[f] != filters[f]) {
           return item;
@@ -52,7 +52,7 @@ class Mockup {
   }
 
   async deleteFor(filters) {
-    this.mockup = this.mockup.filter(item => {
+    this.data = this.data.filter(item => {
       for(const f in filters) {
         if (item[f] != filters[f]) {
           return true;

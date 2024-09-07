@@ -1,7 +1,7 @@
-import Mockup from "./mockup";
+import Mockup from './mockup';
 
 class PurposeMockup extends Mockup {
-  mockup = [
+  data = [
     {
       uuid: '6a8006b0-991e-4aef-829e-239e6b3bcac9',
       title: 'Uno',

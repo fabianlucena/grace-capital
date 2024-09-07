@@ -8,12 +8,20 @@ import CapitalaryScreen from './src/screens/CapitalaryScreen';
 import PurposeScreen from './src/screens/PurposeScreen';
 import PurposesScreen from './src/screens/PurposesScreen';
 import MenuButtonIcon from './src/components/MenuButtonIcon';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { init } from './src/libs/dependency';
 
 const Stack = createNativeStackNavigator();
 const navigationRef = createNavigationContainerRef();
 
 export default function App() {
+  const [isInitiated, setIsInitiated] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => setIsInitiated(true));
+  }, []);
+
   const headerRight = () => (
     <MenuButtonIcon onPress={() => navigationRef.isReady() && navigationRef.navigate('Menu')} />
   );
@@ -24,13 +32,15 @@ export default function App() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator >
-        <Stack.Screen name="Menu"        component={MenuScreen}       options={{             title: _`Menu` }}/>
-        <Stack.Screen name="Purposes"    component={PurposesScreen}   options={{headerRight, title: _`Purposes list` }}/>
-        <Stack.Screen name="Calendar"    component={CalendarScreen}   options={{headerRight, title: _`Calendar` }}/>
-        <Stack.Screen name="Capitalary"  component={CapitalaryScreen} options={{headerRight, title: _`Capitalary` }}/>
-        <Stack.Screen name="Purpose"     component={PurposeScreen}    options={{headerRight, title: _`Purpose` }}/>
-      </Stack.Navigator>
+      {isInitiated? (
+        <Stack.Navigator >
+          <Stack.Screen name="Menu"        component={MenuScreen}       options={{             title: _`Menu` }}/>
+          <Stack.Screen name="Purposes"    component={PurposesScreen}   options={{headerRight, title: _`Purposes list` }}/>
+          <Stack.Screen name="Calendar"    component={CalendarScreen}   options={{headerRight, title: _`Calendar` }}/>
+          <Stack.Screen name="Capitalary"  component={CapitalaryScreen} options={{headerRight, title: _`Capitalary` }}/>
+          <Stack.Screen name="Purpose"     component={PurposeScreen}    options={{headerRight, title: _`Purpose` }}/>
+        </Stack.Navigator>
+      ): null}
     </NavigationContainer>
   );
 }

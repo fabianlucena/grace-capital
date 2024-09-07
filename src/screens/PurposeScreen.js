@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Pressable, Text, TextInput } from 'react-native';
 import styles from '../libs/styles';
 import LocaleText from '../components/LocaleText';
@@ -6,30 +6,35 @@ import Background from '../components/Background';
 import Field from '../components/Field';
 import getDependency from '../libs/dependency';
 
-const purposeService = getDependency('purposeService');
-
 export default function PurposeScreen({navigation, route}) {
   const [title, setTitle] = useState('');
   const [uuid, setUuid] = useState('');
+  const [purposeService, setPurposeService] = useState(null);
 
-  useState(() => {
-    const uuid = route?.params?.uuid;
-    setUuid(uuid);
-    if (!uuid) {
+  useEffect(() => {
+    setPurposeService(getDependency('purposeService'));
+  }, []);
+
+  useEffect(() => {
+    setUuid(route?.params?.uuid);
+  }, [route]);
+
+  useEffect(() => {
+    loadPurpose(uuid);
+  }, [purposeService, uuid]);
+
+  async function loadPurpose(uuid) {
+    if (!purposeService || !uuid) {
       return;
     }
 
-    loadPurpose(uuid);
-  }, [route]);
-
-  async function loadPurpose(uuid) {
     const purpose = await purposeService.getSingleOrNullForUuid(uuid);
     if (purpose) {
       setTitle(purpose.title);
     }
   }
 
-  async function addPurpuose() {
+  async function savePurpose() {
     if (uuid) {
       await purposeService.updateForUuid(uuid, {title});
     } else {
@@ -50,7 +55,7 @@ export default function PurposeScreen({navigation, route}) {
             value={title}
           />
         </Field>
-        <Pressable style={styles.button} onPress={addPurpuose}  >
+        <Pressable style={styles.button} onPress={savePurpose}  >
           <LocaleText>{uuid? 'Update': 'Add'}</LocaleText>
         </Pressable>
         <Pressable style={styles.button} onPress={() => navigation.goBack()}  >
