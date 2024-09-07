@@ -56,18 +56,21 @@ class SQLite {
   }
 
   getWhereFromFilters(filters) {
-    const wheres = [];
+    const wheres = [],
+      whereValues = [];
     for(const f in filters) {
-      wheres.push(`${f}="${filters[f]}"`);
+      wheres.push(`${f}=?`);
+      whereValues.push(filters[f]);
     }
 
-    return wheres.join(' AND ');
+    return [wheres.join(' AND '), whereValues];
   }
 
   async getListFor(filters) {
-    const where = this.getWhereFromFilters(filters);
+    const [where, whereValues] = this.getWhereFromFilters(filters);
     return await this.db.getAllAsync(
-      `SELECT * FROM ${this.tableName} WHERE ${where}`
+      `SELECT * FROM ${this.tableName} WHERE ${where}`,
+      ...whereValues,
     );
   }
 
@@ -85,26 +88,28 @@ class SQLite {
   }
 
   async updateFor(filters, data) {
-    const set = [];
-    const values = [];
+    const set = [],
+      values = [];
     for (const c in data) {
       set.push(`${c}=?`);
       values.push(data[c]);
     }
 
-    const where = this.getWhereFromFilters(filters);
+    const [where, whereValues] = this.getWhereFromFilters(filters);
     const result = await this.db.runAsync(
       `UPDATE ${this.tableName} SET ${set.join(',')} WHERE ${where}`,
-      ...values
+      ...values,
+      ...whereValues,
     );
    
     return result.changes;
   }
 
   async deleteFor(filters) {
-    const where = this.getWhereFromFilters(filters);
+    const [where, whereValues] = this.getWhereFromFilters(filters);
     const result = await this.db.runAsync(
-      `DELETE FROM ${this.tableName} WHERE ${where}`
+      `DELETE FROM ${this.tableName} WHERE ${where}`,
+      ...whereValues,
     );
    
     return result.changes;
