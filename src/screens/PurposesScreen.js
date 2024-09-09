@@ -7,58 +7,82 @@ import Background from '../components/Background';
 import AddButtonIcon from '../components/AddButtonIcon';
 import DeleteButtonIcon from '../components/DeleteButtonIcon';
 import EditButtonIcon from '../components/EditButtonIcon';
+import LeftButtonIcon from '../components/LeftButtonIcon';
+import RightButtonIcon from '../components/RightButtonIcon';
 import getDependency from '../libs/dependency';
+import DateInput from '../components/DateInput';
+import Op from '../libs/operators';
 
 export default function PurposesScreen({navigation}) {
-  const [purposes, setPurposes] = useState([]);
   const isFocused = useIsFocused();
   const [purposeService, setHurposeService] = useState();
+  const [date, setDate] = useState(new Date);
+  const [purposes, setPurposes] = useState([]);
 
   useState(() => {
+    date.setHours(0, 0, 0, 0);
+    setDate(new Date(date));
     setHurposeService(getDependency('purposeService'));
   }, []);
 
-  useEffect(load, [isFocused]);
+  useEffect(load, [isFocused, date]);
 
   function load() {
-    purposeService.getList()
+    purposeService.getListFor({
+      from: { [Op.ge]: date },
+      [Op.or]: [
+        {to: null},
+        {to: {[Op.le]: date}},
+      ],
+    })
       .then(setPurposes);
   }
 
-  function editForUuid(uuid) {
-    navigation.navigate('Purpose', {uuid});
+  function editForId(id) {
+    navigation.navigate('Purpose', {id});
   }
 
-  function deleteForUuid(uuid) {
+  function deleteForId(id) {
     confirm({
       title: 'Confirma',
       message: 'Confirma la eliminación del propósito',
       onOk: async () => {
-        await purposeService.deleteForUuid(uuid);
+        await purposeService.deleteForId(id);
         load();
       },
     });
   }
 
-  async function setIsCompletedForUuid(uuid, isCompleted) {
-    await purposeService.updateForUuid(uuid, {isCompleted});
+  async function setIsCompletedForId(id, isCompleted) {
+    await purposeService.updateForId(id, {isCompleted});
     load();
+  }
+
+  function addDate(days) {
+    date.setDate(date.getDate() + days);
+    setDate(new Date(date));
   }
 
   return (
     <Background>
       <View style={{ ...styles.container }}>
         <AddButtonIcon style={{ ...styles.floatTopLeft, ...styles.gigaIcon }} onPress={() => navigation.navigate('Purpose')} />
+        <LeftButtonIcon onPress={() => addDate(-1)} />
+        <DateInput 
+          date={date}
+          onChange={(_, value) => setDate(value)}
+        />
+        <RightButtonIcon onPress={() => addDate(1)} />
         <FlatList
           style={styles.list}
           data={purposes}
-          keyExtractor={item => item.uuid}
+          keyExtractor={item => item.id}
           renderItem={({item}) => (
             <View style={styles.listItem}>
               <Text style={{ flexGrow: 1 }}>{item.title}</Text>
-              <Switch value={item.isCompleted} onValueChange={() => setIsCompletedForUuid(item.uuid, !item.isCompleted)}/>
-              <EditButtonIcon onPress={() => editForUuid(item.uuid)} />
-              <DeleteButtonIcon onPress={() => deleteForUuid(item.uuid)} />
+              <Switch value={item.isCompleted} onValueChange={() => setIsCompletedForId(item.id, !item.isCompleted)}/>
+              <EditButtonIcon onPress={() => editForId(item.id)} />
+              <DeleteButtonIcon onPress={() => deleteForId(item.id)} />
             </View>
           )}
         />

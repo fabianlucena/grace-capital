@@ -1,25 +1,44 @@
+import Op from "../libs/operators";
+
 class Mockup {
   data = [];
 
   async create(data) {
+    const maxId = this.data.reduce((maxId, item) => {
+      if (maxId < item.id) {
+        maxId = item.id;
+      }
+    }, 0);
+    data.id = maxId + 1;
     this.data = [...this.data, data];
     return data;
   }
 
-  async getList() {
-    return this.data;
-  }
-
-  async getListFor(filters) {
-    return this.data.filter(item => {
-      for(const f in filters) {
-        if (item[f] != filters[f]) {
-          return false;
+  async getList(options) {
+    let list,
+      filters = options?.filters;
+    if (filters) {
+      const keys = Object.keys(filters);
+      const symbols = Object.getOwnPropertySymbols(filters);
+      if ((keys.length + symbols.length) > 1) {
+        let filtersLits = [];
+        for (const k of keys) {
+          filtersLits.push({[k]: filters[k]});
         }
-      }
 
-      return true;
-    });
+        for (const s of symbols) {
+          filtersLits.push({[s]: filters[s]});
+        }
+
+        filters = {[Op.and]: filtersLits};
+      }
+      
+      list = this.data.filter(item => Op.applyFilterToData(filters, item));
+    } else {
+      list = this.data;
+    }
+
+    return list;
   }
 
   async getSingleOrNullFor(filters) {

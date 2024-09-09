@@ -49,12 +49,6 @@ class SQLite {
     return data;
   }
 
-  async getList() {
-    return await this.db.getAllAsync(
-      `SELECT * FROM ${this.tableName}`
-    );
-  }
-
   getWhereFromFilters(filters) {
     const wheres = [],
       whereValues = [];
@@ -66,8 +60,8 @@ class SQLite {
     return [wheres.join(' AND '), whereValues];
   }
 
-  async getListFor(filters) {
-    const [where, whereValues] = this.getWhereFromFilters(filters);
+  async getList(options) {
+    const [where, whereValues] = this.getWhereFromFilters(options?.filters);
     return await this.db.getAllAsync(
       `SELECT * FROM ${this.tableName} WHERE ${where}`,
       ...whereValues,
