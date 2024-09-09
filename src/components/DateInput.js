@@ -7,7 +7,7 @@ export default function DateInput({style, date, onChange}) {
       <input
         style={style}
         type='date'
-        value={date.toISOString().split('T')[0]}
+        value={date?.toISOString().split('T')[0] ?? ''}
         onChange={e => {
           if (onChange) {
             onChange(e, new Date(e.target.value))

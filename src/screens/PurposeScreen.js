@@ -34,6 +34,7 @@ export default function PurposeScreen({navigation, route}) {
 
     const purpose = await purposeService.getSingleOrNullForId(id);
     if (purpose) {
+      console.log(purpose);
       setTitle(purpose.title);
       setDescription(purpose.description);
       setFrom(purpose.from);
@@ -60,6 +61,7 @@ export default function PurposeScreen({navigation, route}) {
   return (
     <Background>
       <View style={styles.container}>
+        <LocaleText>{to?.toISOString().split('T')[0] ?? 'nulo'}</LocaleText>
         <Field>
           <LocaleText>Title</LocaleText>
           <TextInput
@@ -90,7 +92,7 @@ export default function PurposeScreen({navigation, route}) {
           <DateInput
             style={styles.input}
             mode="date"
-            value={to}
+            date={to}
             onChangeText={setTo}
           />
         </Field>

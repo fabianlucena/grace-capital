@@ -12,12 +12,14 @@ import RightButtonIcon from '../components/RightButtonIcon';
 import getDependency from '../libs/dependency';
 import DateInput from '../components/DateInput';
 import Op from '../libs/operators';
+import FiltersButtonIcon from '../components/FiltersButtonIcon';
 
 export default function PurposesScreen({navigation}) {
   const isFocused = useIsFocused();
   const [purposeService, setHurposeService] = useState();
   const [date, setDate] = useState(new Date);
   const [purposes, setPurposes] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(true);
 
   useState(() => {
     date.setHours(0, 0, 0, 0);
@@ -25,16 +27,18 @@ export default function PurposesScreen({navigation}) {
     setHurposeService(getDependency('purposeService'));
   }, []);
 
-  useEffect(load, [isFocused, date]);
+  useEffect(load, [isFocused, date, isFiltered]);
 
   function load() {
-    purposeService.getListFor({
+    const filter = isFiltered? {
       from: { [Op.ge]: date },
       [Op.or]: [
         {to: null},
         {to: {[Op.le]: date}},
       ],
-    })
+    }: null;
+
+    purposeService.getListFor(filter)
       .then(setPurposes);
   }
 
@@ -67,12 +71,15 @@ export default function PurposesScreen({navigation}) {
     <Background>
       <View style={{ ...styles.container }}>
         <AddButtonIcon style={{ ...styles.floatTopLeft, ...styles.gigaIcon }} onPress={() => navigation.navigate('Purpose')} />
-        <LeftButtonIcon onPress={() => addDate(-1)} />
-        <DateInput 
-          date={date}
-          onChange={(_, value) => setDate(value)}
-        />
-        <RightButtonIcon onPress={() => addDate(1)} />
+        <View style={{ ...styles.topBar }}>
+          <LeftButtonIcon onPress={() => addDate(-1)} />
+          <DateInput 
+            date={date}
+            onChange={(_, value) => setDate(value)}
+          />
+          <RightButtonIcon onPress={() => addDate(1)} />
+          <FiltersButtonIcon style={isFiltered? { ...styles.presed }: null} onPress={() => setIsFiltered(!isFiltered)} />
+        </View>
         <FlatList
           style={styles.list}
           data={purposes}

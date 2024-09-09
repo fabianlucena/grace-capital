@@ -8,6 +8,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+
   background: {
     flexGrow: 1,
   },
@@ -22,6 +28,12 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 
+  presed: {
+    backgroundColor: '#c0c0f0',
+    borderRadius: 2,
+    borderColor: '#606060',
+  },
+
   header: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -30,6 +42,7 @@ const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 2,
     borderBottomColor: '#404040',
+    borderRadius: 2,
   },
 
   icon: {

@@ -1,4 +1,5 @@
-import Op from "../libs/operators";
+import execFilter from '../libs/exec_filter';
+import Op from '../libs/operators';
 
 class Mockup {
   data = [];
@@ -33,7 +34,7 @@ class Mockup {
         filters = {[Op.and]: filtersLits};
       }
       
-      list = this.data.filter(item => Op.applyFilterToData(filters, item));
+      list = this.data.filter(item => execFilter(filters, item));
     } else {
       list = this.data;
     }
@@ -42,7 +43,7 @@ class Mockup {
   }
 
   async getSingleOrNullFor(filters) {
-    const list = await this.getListFor(filters);
+    const list = await this.getList({filters});
     if (!list?.length) {
       return;
     }

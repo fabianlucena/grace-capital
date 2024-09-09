@@ -1,3 +1,5 @@
+import filter2SQL from '../libs/filter_2_sql';
+
 class SQLite {
   db = null;
 
@@ -50,14 +52,7 @@ class SQLite {
   }
 
   getWhereFromFilters(filters) {
-    const wheres = [],
-      whereValues = [];
-    for(const f in filters) {
-      wheres.push(`${f}=?`);
-      whereValues.push(filters[f]);
-    }
-
-    return [wheres.join(' AND '), whereValues];
+    return filter2SQL(filters);
   }
 
   async getList(options) {
