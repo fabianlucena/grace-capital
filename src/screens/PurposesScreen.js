@@ -31,10 +31,10 @@ export default function PurposesScreen({navigation}) {
 
   function load() {
     const filter = isFiltered? {
-      from: { [Op.ge]: date },
+      fromDate: { [Op.ge]: date },
       [Op.or]: [
-        {to: null},
-        {to: {[Op.le]: date}},
+        {toDate: null},
+        {toDate: {[Op.le]: date}},
       ],
     }: null;
 
@@ -75,7 +75,7 @@ export default function PurposesScreen({navigation}) {
           <LeftButtonIcon onPress={() => addDate(-1)} />
           <DateInput 
             date={date}
-            onChange={(_, value) => setDate(value)}
+            // onChange={(_, date) => setDate(date)}
           />
           <RightButtonIcon onPress={() => addDate(1)} />
           <FiltersButtonIcon style={isFiltered? { ...styles.presed }: null} onPress={() => setIsFiltered(!isFiltered)} />

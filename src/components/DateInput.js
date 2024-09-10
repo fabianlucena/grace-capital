@@ -18,7 +18,7 @@ export default function DateInput({style, date, onChange}) {
       <DateTimePicker
         style={style}
         mode='date'
-        date={date}
+        value={date}
         onChange={onChange}
       />
     );

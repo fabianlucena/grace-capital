@@ -1,4 +1,5 @@
-import filter2SQL from '../libs/filter_2_sql';
+import filter2SQL from '../libs/filter2sql';
+import Op from '../libs/operators';
 
 class SQLite {
   db = null;
@@ -16,17 +17,24 @@ class SQLite {
     for (const name in this.columns) {
       const column = this.columns[name];
       let definition = `${name} ${column.type}`;
-      if (typeof column.allowNull !== 'undefined') {
-        definition += ' ' + column.allowNull? 'NULL': 'NOT NULL';
-      }
+      
       if (column.primaryKey) {
         definition += ' PRIMARY KEY';
+      }
+      
+      if (column.allowNull === false) {
+        definition += ' NOT NULL';
       }
 
       columns.push(definition);
     }
 
-    const sql = `PRAGMA journal_mode = WAL;CREATE TABLE IF NOT EXISTS ${this.tableName}(${columns.join(',')});`
+    const sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (${columns.join(',')});`;
+    await this.db.execAsync(sql);
+  }
+
+  async dropTable() {
+    const sql = `DROP TABLE IF EXISTS ${this.tableName};`
     await this.db.execAsync(sql);
   }
 
@@ -52,13 +60,41 @@ class SQLite {
   }
 
   getWhereFromFilters(filters) {
-    return filter2SQL(filters);
+    if (!filters) {
+      return [];
+    }
+
+    const keys = Object.keys(filters);
+    const symbols = Object.getOwnPropertySymbols(filters);
+    if ((keys.length + symbols.length) > 1) {
+      let filtersLits = [];
+      for (const k of keys) {
+        filtersLits.push({[k]: filters[k]});
+      }
+
+      for (const s of symbols) {
+        filtersLits.push({[s]: filters[s]});
+      }
+
+      filters = {[Op.and]: filtersLits};
+    }
+
+    const [sql, ...params] = filter2SQL(
+      filters,
+      {
+        dateConvert: d => d.toISOString().split('T')[0]
+      },
+    );
+
+    return ['WHERE ' + sql, ...params];
   }
 
   async getList(options) {
-    const [where, whereValues] = this.getWhereFromFilters(options?.filters);
+    const [where, ...whereValues] = this.getWhereFromFilters(options?.filters);
+    console.log(`SELECT * FROM ${this.tableName} ${where ?? ''}`,
+      ...whereValues);
     return await this.db.getAllAsync(
-      `SELECT * FROM ${this.tableName} WHERE ${where}`,
+      `SELECT * FROM ${this.tableName} ${where}`,
       ...whereValues,
     );
   }
@@ -84,9 +120,9 @@ class SQLite {
       values.push(data[c]);
     }
 
-    const [where, whereValues] = this.getWhereFromFilters(filters);
+    const [where, ...whereValues] = this.getWhereFromFilters(filters);
     const result = await this.db.runAsync(
-      `UPDATE ${this.tableName} SET ${set.join(',')} WHERE ${where}`,
+      `UPDATE ${this.tableName} SET ${set.join(',')} ${where}`,
       ...values,
       ...whereValues,
     );
@@ -95,9 +131,9 @@ class SQLite {
   }
 
   async deleteFor(filters) {
-    const [where, whereValues] = this.getWhereFromFilters(filters);
+    const [where, ...whereValues] = this.getWhereFromFilters(filters);
     const result = await this.db.runAsync(
-      `DELETE FROM ${this.tableName} WHERE ${where}`,
+      `DELETE FROM ${this.tableName} ${where}`,
       ...whereValues,
     );
    

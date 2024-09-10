@@ -12,8 +12,8 @@ export default function PurposeScreen({navigation, route}) {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [from, setFrom] = useState(new Date);
-  const [to, setTo] = useState(new Date);
+  const [fromDate, setFromDate] = useState(new Date);
+  const [toDate, setToDate] = useState(new Date);
 
   useEffect(() => {
     setPurposeService(getDependency('purposeService'));
@@ -37,8 +37,8 @@ export default function PurposeScreen({navigation, route}) {
       console.log(purpose);
       setTitle(purpose.title);
       setDescription(purpose.description);
-      setFrom(purpose.from);
-      setTo(purpose.to);
+      setFromDate(purpose.fromDate);
+      setToDate(purpose.toDate);
     }
   }
 
@@ -46,8 +46,8 @@ export default function PurposeScreen({navigation, route}) {
     const data = {
       title,
       description,
-      from,
-      to,
+      fromDate,
+      toDate,
     };
     if (id) {
       await purposeService.updateForId(id, data);
@@ -61,7 +61,7 @@ export default function PurposeScreen({navigation, route}) {
   return (
     <Background>
       <View style={styles.container}>
-        <LocaleText>{to?.toISOString().split('T')[0] ?? 'nulo'}</LocaleText>
+        <LocaleText>{toDate?.toISOString().split('T')[0] ?? 'nulo'}</LocaleText>
         <Field>
           <LocaleText>Title</LocaleText>
           <TextInput
@@ -83,8 +83,8 @@ export default function PurposeScreen({navigation, route}) {
           <DateInput
             style={styles.input}
             mode="date"
-            date={from}
-            onChangeText={setFrom}
+            date={fromDate}
+            onChangeText={setFromDate}
           />
         </Field>
         <Field>
@@ -92,8 +92,8 @@ export default function PurposeScreen({navigation, route}) {
           <DateInput
             style={styles.input}
             mode="date"
-            date={to}
-            onChangeText={setTo}
+            date={toDate}
+            onChangeText={setToDate}
           />
         </Field>
         <Pressable style={styles.button} onPress={savePurpose}  >
