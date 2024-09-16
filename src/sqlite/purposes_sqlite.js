@@ -1,6 +1,6 @@
 import SQLite from './sqlite';
 
-class PurposeSQLite extends SQLite {
+class PurposesSQLite extends SQLite {
   tableName = 'purposes';
   columns = {
     id:          { type: 'INTEGER', primaryKey: true },
@@ -13,4 +13,4 @@ class PurposeSQLite extends SQLite {
   columnId = 'id';
 }
 
-export default PurposeSQLite;
+export default PurposesSQLite;

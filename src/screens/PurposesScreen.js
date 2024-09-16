@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, FlatList, Text, Switch } from 'react-native';
-import { useIsFocused } from "@react-navigation/native";
+import { View, FlatList, Text, Switch, Pressable } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import styles from '../libs/styles';
 import { confirm } from '../libs/confirm';
 import Background from '../components/Background';
@@ -16,7 +16,7 @@ import FiltersButtonIcon from '../components/FiltersButtonIcon';
 
 export default function PurposesScreen({navigation}) {
   const isFocused = useIsFocused();
-  const [purposeService, setHurposeService] = useState();
+  const [purposesService, setPurposesService] = useState();
   const [date, setDate] = useState(new Date);
   const [purposes, setPurposes] = useState([]);
   const [isFiltered, setIsFiltered] = useState(true);
@@ -24,13 +24,13 @@ export default function PurposesScreen({navigation}) {
   useState(() => {
     date.setHours(0, 0, 0, 0);
     setDate(new Date(date));
-    setHurposeService(getDependency('purposeService'));
+    setPurposesService(getDependency('purposesService'));
   }, []);
 
-  useEffect(load, [isFocused, date, isFiltered]);
+  useEffect(() => {load()}, [isFocused, date, isFiltered]);
 
-  function load() {
-    const filter = isFiltered? {
+  async function load() {
+    const filters = isFiltered? {
       fromDate: { [Op.ge]: date },
       [Op.or]: [
         {toDate: null},
@@ -38,8 +38,18 @@ export default function PurposesScreen({navigation}) {
       ],
     }: null;
 
-    purposeService.getListFor(filter)
-      .then(setPurposes);
+    const purposes = await purposesService.getListFor(
+      filters,
+      {
+        include: {
+          accomplishments: {
+            filters: { date },
+          },
+        },
+      },
+    );
+    
+    setPurposes(purposes);
   }
 
   function editForId(id) {
@@ -51,14 +61,14 @@ export default function PurposesScreen({navigation}) {
       title: 'Confirma',
       message: 'Confirma la eliminación del propósito',
       onOk: async () => {
-        await purposeService.deleteForId(id);
+        await purposesService.deleteForId(id);
         load();
       },
     });
   }
 
   async function setIsCompletedForId(id, isCompleted) {
-    await purposeService.updateForId(id, {isCompleted});
+    await purposesService.updateForId(id, {isCompleted});
     load();
   }
 
@@ -75,7 +85,7 @@ export default function PurposesScreen({navigation}) {
           <LeftButtonIcon onPress={() => addDate(-1)} />
           <DateInput 
             date={date}
-            // onChange={(_, date) => setDate(date)}
+            onChange={(_, date) => setDate(date)}
           />
           <RightButtonIcon onPress={() => addDate(1)} />
           <FiltersButtonIcon style={isFiltered? { ...styles.presed }: null} onPress={() => setIsFiltered(!isFiltered)} />
@@ -87,7 +97,7 @@ export default function PurposesScreen({navigation}) {
           renderItem={({item}) => (
             <View style={styles.listItem}>
               <Text style={{ flexGrow: 1 }}>{item.title}</Text>
-              <Switch value={item.isCompleted} onValueChange={() => setIsCompletedForId(item.id, !item.isCompleted)}/>
+              <Switch value={item.accomplishments.length} onValueChange={() => setIsCompletedForId(item.id, !item.isCompleted)}/>
               <EditButtonIcon onPress={() => editForId(item.id)} />
               <DeleteButtonIcon onPress={() => deleteForId(item.id)} />
             </View>

@@ -1,5 +1,5 @@
 import ButtonIcon from './ButtonIcon';
-import _ from '../libs/locale';
+import { _ } from '../libs/locale';
 import menuIcon from '../images/menu.png';
 
 export default function MenuButtonIcon({style, onPress}) {

@@ -1,6 +1,6 @@
 import SQLite from './sqlite';
 
-class OptionSQLite extends SQLite {
+class OptionsSQLite extends SQLite {
   tableName = 'options';
   columns = {
     id:    { type: 'INTEGER', allowNull: false, primaryKey: true },
@@ -11,4 +11,4 @@ class OptionSQLite extends SQLite {
   columnId = 'id';
 }
 
-export default OptionSQLite;
+export default OptionsSQLite;

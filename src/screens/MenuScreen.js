@@ -10,6 +10,7 @@ export default function MenuScreen({navigation}) {
         <Pressable style={styles.button} onPress={() => navigation.navigate('Calendar')}  ><LocaleText>Calendar  </LocaleText></Pressable>
         <Pressable style={styles.button} onPress={() => navigation.navigate('Purposes')}  ><LocaleText>Purposes  </LocaleText></Pressable>
         <Pressable style={styles.button} onPress={() => navigation.navigate('Capitalary')}><LocaleText>Capitalary</LocaleText></Pressable>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('Export')}    ><LocaleText>Export    </LocaleText></Pressable>
       </View>
     </Background>
   );

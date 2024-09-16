@@ -1,5 +1,5 @@
 import { Platform, Alert } from 'react-native';
-import _ from './locale';
+import { _ } from './locale';
 
 export function confirm({title = _`Confirm`, message = _`Do you want to confirm?`, onOk, onCancel}) {
   if (Platform.OS === 'web') {

@@ -8,7 +8,7 @@ import getDependency from '../libs/dependency';
 import DateInput from '../components/DateInput';
 
 export default function PurposeScreen({navigation, route}) {
-  const [purposeService, setPurposeService] = useState(null);
+  const [purposesService, setPurposesService] = useState(null);
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -16,7 +16,7 @@ export default function PurposeScreen({navigation, route}) {
   const [toDate, setToDate] = useState(new Date);
 
   useEffect(() => {
-    setPurposeService(getDependency('purposeService'));
+    setPurposesService(getDependency('purposesService'));
   }, []);
 
   useEffect(() => {
@@ -25,14 +25,14 @@ export default function PurposeScreen({navigation, route}) {
 
   useEffect(() => {
     loadPurpose(id);
-  }, [purposeService, id]);
+  }, [purposesService, id]);
 
   async function loadPurpose(id) {
-    if (!purposeService || !id) {
+    if (!purposesService || !id) {
       return;
     }
 
-    const purpose = await purposeService.getSingleOrNullForId(id);
+    const purpose = await purposesService.getSingleOrNullForId(id);
     if (purpose) {
       console.log(purpose);
       setTitle(purpose.title);
@@ -50,9 +50,9 @@ export default function PurposeScreen({navigation, route}) {
       toDate,
     };
     if (id) {
-      await purposeService.updateForId(id, data);
+      await purposesService.updateForId(id, data);
     } else {
-      await purposeService.create(data);
+      await purposesService.create(data);
     }
 
     navigation.goBack();

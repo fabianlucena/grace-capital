@@ -7,6 +7,14 @@ function execFilter(filter, data, value2) {
     filter = null;
   }
 
+  if (filter instanceof Date) {
+    filter = filter.getTime();
+  }
+
+  if (value2 instanceof Date) {
+    value2 = value2.getTime();
+  }
+
   if (typeof filter === 'string'
     || typeof filter === 'number'
     || filter instanceof Date
@@ -16,7 +24,7 @@ function execFilter(filter, data, value2) {
     || filter === null
   ) {
     if (typeof value2 !== 'undefined') {
-      return filter === value2;
+      return filter == value2;
     }
 
     return filter;
@@ -93,12 +101,6 @@ function execFilter_or(operand, data) {
 function execFilter_ge(value1, data, value2) {
   let effectiveValue1 = execFilter(value1, data),
     effectiveValue2 = value2;
-  if (effectiveValue1 instanceof Date) {
-    effectiveValue1 = effectiveValue1.getTime();
-  }
-  if (effectiveValue2 instanceof Date) {
-    effectiveValue2 = effectiveValue2.getTime();
-  }
 
   return effectiveValue1 >= effectiveValue2;
 }
@@ -106,12 +108,6 @@ function execFilter_ge(value1, data, value2) {
 function execFilter_le(value1, data, value2) {
   let effectiveValue1 = execFilter(value1, data),
     effectiveValue2 = value2;
-  if (effectiveValue1 instanceof Date) {
-    effectiveValue1 = effectiveValue1.getTime();
-  }
-  if (effectiveValue2 instanceof Date) {
-    effectiveValue2 = effectiveValue2.getTime();
-  }
 
   return effectiveValue1 <= effectiveValue2;
 }

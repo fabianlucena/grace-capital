@@ -1,5 +1,5 @@
 import ButtonIcon from './ButtonIcon';
-import _ from '../libs/locale';
+import { _ } from '../libs/locale';
 import rightIcon from '../images/right.png';
 
 export default function RightButtonIcon({style, onPress}) {

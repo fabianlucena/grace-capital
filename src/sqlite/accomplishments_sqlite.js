@@ -1,6 +1,6 @@
 import SQLite from './sqlite';
 
-class AccomplishmentSQLite extends SQLite {
+class AccomplishmentsSQLite extends SQLite {
   tableName = 'accomplishment';
   columns = {
     id:             { type: 'INTEGER', allowNull: false, primaryKey: true },
@@ -11,4 +11,4 @@ class AccomplishmentSQLite extends SQLite {
   columnId = 'id';
 }
 
-export default AccomplishmentSQLite;
+export default AccomplishmentsSQLite;
