@@ -12,6 +12,14 @@ class SQLite {
     await this.createTable();
   }
 
+  arrangeDataToSave(row) {
+    return {...row};
+  }
+
+  arrangeLoadedData(row) {
+    return {...row};
+  }
+
   async createTable() {
     const columns = [];
     for (const name in this.columns) {
@@ -42,15 +50,18 @@ class SQLite {
     const columns = [],
       questions = [],
       values = [];
+    data = this.arrangeDataToSave(data);
     for (const c in data) {
       columns.push(c);
       questions.push('?');
       values.push(data[c]);
     }
-    const result = await this.db.runAsync(
-      `INSERT INTO ${this.tableName} (${columns.join(',')}) VALUES (${questions.join(',')})`,
-      ...values
-    );
+
+    const sql = `INSERT INTO ${this.tableName} (${columns.join(',')}) VALUES (${questions.join(',')})`;
+
+    console.log(sql, ...values);
+
+    const result = await this.db.runAsync(sql, ...values);
 
     if (this.columnId) {
       data[this.columnId] = result.lastInsertRowId;
@@ -90,13 +101,14 @@ class SQLite {
   }
 
   async getList(options) {
-    const [where, ...whereValues] = this.getWhereFromFilters(options?.filters);
-    console.log(`SELECT * FROM ${this.tableName} ${where ?? ''}`,
-      ...whereValues);
-    return await this.db.getAllAsync(
-      `SELECT * FROM ${this.tableName} ${where}`,
-      ...whereValues,
-    );
+    const [where, ...whereValues] = this.getWhereFromFilters(options?.filters),
+      sql = `SELECT * FROM ${this.tableName} ${where ?? ''}`;
+      
+    console.log(sql, ...whereValues);
+
+    let list = await this.db.getAllAsync(sql, ...whereValues);
+    list = list.map(this.arrangeLoadedData);
+    return list;
   }
 
   async getSingleOrNullFor(filters) {

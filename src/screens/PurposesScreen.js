@@ -17,13 +17,12 @@ import FiltersButtonIcon from '../components/FiltersButtonIcon';
 export default function PurposesScreen({navigation}) {
   const isFocused = useIsFocused();
   const [purposesService, setPurposesService] = useState();
-  const [date, setDate] = useState(new Date);
+  const [date, setDate] = useState('');
   const [purposes, setPurposes] = useState([]);
   const [isFiltered, setIsFiltered] = useState(true);
 
   useState(() => {
-    date.setHours(0, 0, 0, 0);
-    setDate(new Date(date));
+    setDate((new Date).toISOString().split('T')[0]);
     setPurposesService(getDependency('purposesService'));
   }, []);
 
@@ -48,7 +47,7 @@ export default function PurposesScreen({navigation}) {
         },
       },
     );
-    
+
     setPurposes(purposes);
   }
 
@@ -68,7 +67,6 @@ export default function PurposesScreen({navigation}) {
   }
 
   async function setIsCompletedForId(id, isAccomplished) {
-    //await purposesService.updateForId(id, {isCompleted});
     if (isAccomplished) {
       await purposesService.addAccomplishmentForIdAndDate(id, date);
     } else {
@@ -79,8 +77,9 @@ export default function PurposesScreen({navigation}) {
   }
 
   function addDate(days) {
-    date.setDate(date.getDate() + days);
-    setDate(new Date(date));
+    let newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + days);
+    setDate(newDate.toISOString().split('T')[0]);
   }
 
   return (
@@ -91,6 +90,7 @@ export default function PurposesScreen({navigation}) {
           <LeftButtonIcon onPress={() => addDate(-1)} />
           <DateInput 
             date={date}
+            valueType="text"
             onChange={(_, date) => setDate(date)}
           />
           <RightButtonIcon onPress={() => addDate(1)} />

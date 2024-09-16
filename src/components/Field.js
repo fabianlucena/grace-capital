@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import styles from '../libs/styles';
 
-export default function Field({children}) {
+export default function Field({children, style}) {
   return (
-    <View>
+    <View style={style}>
       {children}
     </View>
   );

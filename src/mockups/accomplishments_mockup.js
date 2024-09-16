@@ -5,7 +5,7 @@ class AccomplishmentsMockup extends Mockup {
     {
       id:             1,
       purposeId:      1,
-      date:           new Date(2024, 8, 15, 0, 0, 0),
+      date:           '2024-09-15',
       accomplishment: 1,
     },
   ];

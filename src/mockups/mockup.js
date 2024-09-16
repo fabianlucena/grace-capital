@@ -4,6 +4,14 @@ import Op from '../libs/operators';
 class Mockup {
   data = [];
 
+  arrangeDataToSave(row) {
+    return {...row};
+  }
+
+  arrangeLoadedData(row) {
+    return {...row};
+  }
+
   async create(data) {
     const maxId = this.data.reduce((maxId, item) => {
       if (maxId < item.id) {
@@ -13,7 +21,7 @@ class Mockup {
       return maxId;
     }, 0);
     
-    data = {id: (maxId ?? 0) + 1, ...data};
+    data = {id: (maxId ?? 0) + 1, ...this.arrangeDataToSave(data)};
     this.data = [...this.data, data];
     return data;
   }
@@ -50,6 +58,8 @@ class Mockup {
     } else {
       list = this.data;
     }
+    
+    list = list.map(this.arrangeLoadedData);
 
     return list;
   }

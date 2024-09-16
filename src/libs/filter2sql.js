@@ -12,7 +12,9 @@ function filter2SQL(filter, options) {
   if (options?.dateConvert && filter instanceof Date) {
     filter = options.dateConvert(filter);
   }
+
   if (typeof filter === 'string'
+    || typeof filter === 'number'
     || filter instanceof Date
     || filter instanceof String
     || filter instanceof Number
@@ -25,8 +27,10 @@ function filter2SQL(filter, options) {
     keys = Object.keys(filter),
     total = symbols.length + keys.length;
   if (total > 1) {
+    console.error(filter);
     throw Error('Invalid filter, multiple properties in filter.');
   } else if (!total) {
+    console.error(filter);
     throw Error('Invalid filter, no properties in filter.');
   }
 
@@ -37,11 +41,16 @@ function filter2SQL(filter, options) {
       return [`${key} IS NULL`];
     }
 
-    const [query, ...thisValues] = filter2SQL(value, options);
+    let [query, ...thisValues] = filter2SQL(value, options);
+    if (query === '?') {
+      query = '=?';
+    }
+
     return [`${key}${query}`, ...thisValues];
   }
 
   if (!symbols.length) {
+    console.error(filter);
     throw Error('Invalid filter, expected value or operand.');
   }
 

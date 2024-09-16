@@ -24,9 +24,9 @@ export async function init() {
     optionsRepo = new OptionsSQLite(gc);
     purposesRepo = new PurposesSQLite(gc);
     accomplishmentsRepo = new AccomplishmentsSQLite(gc);
-    //await optionRepo.dropTable();
-    //await purposeRepo.dropTable();
-    //await accomplishmentRepo.dropTable();
+    //await optionsRepo.dropTable();
+    //await purposesRepo.dropTable();
+    //await accomplishmentsRepo.dropTable();
     await optionsRepo.init();
     await purposesRepo.init();
     await accomplishmentsRepo.init();

@@ -8,12 +8,13 @@ import getDependency from '../libs/dependency';
 import DateInput from '../components/DateInput';
 
 export default function PurposeScreen({navigation, route}) {
+  const today = (new Date).toISOString().split('T')[0];
   const [purposesService, setPurposesService] = useState(null);
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [fromDate, setFromDate] = useState(new Date);
-  const [toDate, setToDate] = useState(new Date);
+  const [fromDate, setFromDate] = useState(today);
+  const [toDate, setToDate] = useState(today);
 
   useEffect(() => {
     setPurposesService(getDependency('purposesService'));
@@ -34,7 +35,6 @@ export default function PurposeScreen({navigation, route}) {
 
     const purpose = await purposesService.getSingleOrNullForId(id);
     if (purpose) {
-      console.log(purpose);
       setTitle(purpose.title);
       setDescription(purpose.description);
       setFromDate(purpose.fromDate);
@@ -49,6 +49,7 @@ export default function PurposeScreen({navigation, route}) {
       fromDate,
       toDate,
     };
+    
     if (id) {
       await purposesService.updateForId(id, data);
     } else {
@@ -61,39 +62,40 @@ export default function PurposeScreen({navigation, route}) {
   return (
     <Background>
       <View style={styles.container}>
-        <LocaleText>{toDate?.toISOString().split('T')[0] ?? 'nulo'}</LocaleText>
-        <Field>
-          <LocaleText>Title</LocaleText>
+        <Field style={styles.field}>
+          <LocaleText style={styles.label}>Title</LocaleText>
           <TextInput
             style={styles.input}
             value={title}
             onChangeText={setTitle}
           />
         </Field>
-        <Field>
-          <LocaleText>Description</LocaleText>
+        <Field style={styles.field}>
+          <LocaleText style={styles.label}>Description</LocaleText>
           <TextInput
             style={styles.input}
             value={description}
             onChangeText={setDescription}
           />
         </Field>
-        <Field>
-          <LocaleText>From</LocaleText>
+        <Field style={styles.field}>
+          <LocaleText style={styles.label}>From</LocaleText>
           <DateInput
             style={styles.input}
             mode="date"
             date={fromDate}
-            onChangeText={setFromDate}
+            valueType="text"
+            onChange={(_, date) => setFromDate(date)}
           />
         </Field>
-        <Field>
-          <LocaleText>To</LocaleText>
+        <Field style={styles.field}>
+          <LocaleText style={styles.label}>To</LocaleText>
           <DateInput
             style={styles.input}
             mode="date"
             date={toDate}
-            onChangeText={setToDate}
+            valueType="text"
+            onChange={(_, date) => setToDate(date)}
           />
         </Field>
         <Pressable style={styles.button} onPress={savePurpose}  >

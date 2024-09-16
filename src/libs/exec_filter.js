@@ -8,11 +8,11 @@ function execFilter(filter, data, value2) {
   }
 
   if (filter instanceof Date) {
-    filter = filter.getTime();
+    filter = filter.toISOString();
   }
 
   if (value2 instanceof Date) {
-    value2 = value2.getTime();
+    value2 = value2.toISOString();
   }
 
   if (typeof filter === 'string'

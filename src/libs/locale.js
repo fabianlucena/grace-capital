@@ -38,9 +38,16 @@ export class Locale {
             + format.substr(i + 1);
         break;
 
+        case 'F': 
+          format = format.substr(0, i + 1)
+            + '%Y-%m-%d'
+            + format.substr(i + 1);
+        break;
+
         case 'm': result += (date.getMonth() + 1).toString().padStart(2, '0'); break;
         case 'd': result += (date.getDate()).     toString().padStart(2, '0'); break;
-        case 'y': result += (date.getFullYear()). toString().padStart(4, '0'); break;
+        case 'Y': result += (date.getFullYear()). toString().padStart(4, '0'); break;
+        case 'y': result += (date.getFullYear()). toString().substr(2); break;
         default: result += char;
       }
     }

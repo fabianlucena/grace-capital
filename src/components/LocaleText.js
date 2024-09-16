@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { loc } from '../libs/locale';
 
-export default function LocaleText({style, children}) {
+export default function LocaleText({children, style}) {
   const [text, setText] = useState('');
 
   useEffect(() => {

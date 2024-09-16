@@ -105,6 +105,21 @@ const styles = StyleSheet.create({
     minHeight: 30,
     margin: 5,
   },
+
+  field: {
+    width: '100%',
+    borderColor: '#808080',
+    borderWidth: 2,
+    borderRadius: 3,
+    margin: 4,
+    padding: 5,
+  },
+
+  label: {
+    color: '#606060',
+    fontSize: 12,
+    fontWeight: 'bold',
+  }
 });
 
 export default styles;
