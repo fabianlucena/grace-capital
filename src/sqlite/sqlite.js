@@ -1,5 +1,6 @@
 import filter2SQL from '../libs/filter2sql';
 import Op from '../libs/operators';
+import SQLiteOptions from '../libs/sqlite_options';
 
 class SQLite {
   db = null;
@@ -90,12 +91,7 @@ class SQLite {
       filters = {[Op.and]: filtersLits};
     }
 
-    const [sql, ...params] = filter2SQL(
-      filters,
-      {
-        dateConvert: d => d.toISOString().split('T')[0]
-      },
-    );
+    const [sql, ...params] = filter2SQL(filters, SQLiteOptions);
 
     return ['WHERE ' + sql, ...params];
   }

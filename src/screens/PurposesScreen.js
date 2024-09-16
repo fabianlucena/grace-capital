@@ -15,6 +15,7 @@ import Op from '../libs/operators';
 import FiltersButtonIcon from '../components/FiltersButtonIcon';
 
 export default function PurposesScreen({navigation}) {
+  const today = (new Date).toISOString().split('T')[0];
   const isFocused = useIsFocused();
   const [purposesService, setPurposesService] = useState();
   const [date, setDate] = useState('');
@@ -22,7 +23,7 @@ export default function PurposesScreen({navigation}) {
   const [isFiltered, setIsFiltered] = useState(true);
 
   useState(() => {
-    setDate((new Date).toISOString().split('T')[0]);
+    setDate(today);
     setPurposesService(getDependency('purposesService'));
   }, []);
 
@@ -42,7 +43,12 @@ export default function PurposesScreen({navigation}) {
       {
         include: {
           accomplishments: {
-            filters: { date },
+            filters: {
+              [Op.eq]: [
+                {[Op.date]: {[Op.col]: 'date'}},
+                date
+              ],
+            },
           },
         },
       },
@@ -68,9 +74,9 @@ export default function PurposesScreen({navigation}) {
 
   async function setIsCompletedForId(id, isAccomplished) {
     if (isAccomplished) {
-      await purposesService.addAccomplishmentForIdAndDate(id, date);
+      await purposesService.addAccomplishmentForIdAndDate(id, new Date);
     } else {
-      await purposesService.deleteAccomplishmentForIdAndDate(id, date);
+      await purposesService.deleteAccomplishmentForIdAndDate(id, today);
     }
 
     load();

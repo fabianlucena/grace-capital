@@ -1,4 +1,5 @@
 import getDependency from '../libs/dependency';
+import Op from '../libs/operators';
 import Service from './service';
 
 class PurposesService extends Service {
@@ -27,7 +28,10 @@ class PurposesService extends Service {
   async deleteAccomplishmentForIdAndDate(id, date) {
     this.accomplishmentsService.deleteFor({
       purposeId: id,
-      date,
+      [Op.eq]: [
+        {[Op.date]: {[Op.col]: 'date'}},
+        date
+      ],
     });
   }
 };

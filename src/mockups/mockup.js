@@ -1,5 +1,7 @@
 import execFilter from '../libs/exec_filter';
+import filter2SQL from '../libs/filter2sql';
 import Op from '../libs/operators';
+import SQLiteOptions from '../libs/sqlite_options';
 
 class Mockup {
   data = [];
@@ -58,7 +60,7 @@ class Mockup {
     } else {
       list = this.data;
     }
-    
+
     list = list.map(this.arrangeLoadedData);
 
     return list;

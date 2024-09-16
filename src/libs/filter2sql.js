@@ -35,7 +35,7 @@ function filter2SQL(filter, options) {
   }
 
   if (keys.length) {
-    const key = keys[0],
+    let key = keys[0],
       value = filter[key];
     if (value === null) {
       return [`${key} IS NULL`];
@@ -44,6 +44,10 @@ function filter2SQL(filter, options) {
     let [query, ...thisValues] = filter2SQL(value, options);
     if (query === '?') {
       query = '=?';
+    }
+
+    if (options.col) {
+      key = options.col(key);
     }
 
     return [`${key}${query}`, ...thisValues];
@@ -58,15 +62,47 @@ function filter2SQL(filter, options) {
     value1 = filter[symbol];
 
   switch(symbol) {
-    case Op.and: return filter2SQL_and(value1, options);
-    case Op.or:  return filter2SQL_or(value1, options);
-    case Op.ge:  return filter2SQL_ge(value1, options);
-    case Op.le:  return filter2SQL_le(value1, options);
+    case Op.col:  return filter2SQL_col(value1, options);
+    case Op.eq:   return filter2SQL_eq(value1, options);
+    case Op.and:  return filter2SQL_and(value1, options);
+    case Op.or:   return filter2SQL_or(value1, options);
+    case Op.ge:   return filter2SQL_ge(value1, options);
+    case Op.le:   return filter2SQL_le(value1, options);
+    case Op.date: return filter2SQL_date(value1, options);
     default: {
       console.error(filter);
       throw Error(`Invalid filter, unknown operator: ${symbol.toString()}.`);
     }
   }
+}
+
+function filter2SQL_col(value1, options) {
+  if (typeof value1 !== 'string') {
+    throw Error('Invalid filter, Symbol(eq) requires string.');
+  }
+
+  if (options.col) {
+    value1 = options.col(value1);
+  }
+
+  return [value1];
+}
+
+function filter2SQL_eq(operand, options) {
+  if (Array.isArray(operand)) {
+    if (operand.length != 2) {
+      throw Error('Invalid filter, Symbol(eq) requires a list of two operands.');
+    }
+
+    const 
+      [query1, ...values1] = filter2SQL(operand[0], options),
+      [query2, ...values2] = filter2SQL(operand[1], options);
+    
+    return [`${query1}=${query2}`, ...values1, ...values2];
+  }
+  
+  const [query, ...value] = filter2SQL(operand, options);
+  return [`=${query}`, ...value];
 }
 
 function filter2SQL_and(operand, options) {
@@ -105,4 +141,9 @@ function filter2SQL_ge(value1, options) {
 function filter2SQL_le(value1, options) {
   const [query, ...value] = filter2SQL(value1, options);
   return [`<=${query}`, ...value];
+}
+
+function filter2SQL_date(value1, options) {
+  let [query, ...args] = filter2SQL(value1, options);
+  return options.date(query, ...args);
 }
