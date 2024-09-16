@@ -7,34 +7,46 @@ class Mockup {
   async create(data) {
     const maxId = this.data.reduce((maxId, item) => {
       if (maxId < item.id) {
-        maxId = item.id;
+        return item.id;
       }
+
+      return maxId;
     }, 0);
-    data.id = maxId + 1;
+    
+    data = {id: (maxId ?? 0) + 1, ...data};
     this.data = [...this.data, data];
     return data;
   }
 
+  getFilterFromOptions(options) {
+    const filters = options?.filters;
+    if (!filters) {
+      return;
+    }
+
+    const keys = Object.keys(filters);
+    const symbols = Object.getOwnPropertySymbols(filters);
+    if ((keys.length + symbols.length) < 2) {
+      return filters;
+    }
+
+    let filtersLits = [];
+    for (const k of keys) {
+      filtersLits.push({[k]: filters[k]});
+    }
+
+    for (const s of symbols) {
+      filtersLits.push({[s]: filters[s]});
+    }
+
+    return {[Op.and]: filtersLits};
+  }
+
   async getList(options) {
-    let list,
-      filters = options?.filters;
-    if (filters) {
-      const keys = Object.keys(filters);
-      const symbols = Object.getOwnPropertySymbols(filters);
-      if ((keys.length + symbols.length) > 1) {
-        let filtersLits = [];
-        for (const k of keys) {
-          filtersLits.push({[k]: filters[k]});
-        }
-
-        for (const s of symbols) {
-          filtersLits.push({[s]: filters[s]});
-        }
-
-        filters = {[Op.and]: filtersLits};
-      }
-      
-      list = this.data.filter(item => execFilter(filters, item));
+    const filter = this.getFilterFromOptions(options);
+    let list;
+    if (filter) {
+      list = this.data.filter(item => execFilter(filter, item));
     } else {
       list = this.data;
     }
@@ -56,12 +68,11 @@ class Mockup {
   }
 
   async updateFor(filters, data) {
+    const filter = this.getFilterFromOptions({filters});
     let count = 0;
     this.data = this.data.map(item => {
-      for(const f in filters) {
-        if (item[f] != filters[f]) {
-          return item;
-        }
+      if (!execFilter(filter, item)) {
+        return item;
       }
 
       count++;
@@ -72,15 +83,12 @@ class Mockup {
   }
 
   async deleteFor(filters) {
-    this.data = this.data.filter(item => {
-      for(const f in filters) {
-        if (item[f] != filters[f]) {
-          return true;
-        }
-      }
+    const filter = this.getFilterFromOptions({filters});
 
-      return false;
-    });
+    const previousCount = this.data.length;
+    this.data = this.data.filter(item => !execFilter(filter, item));
+
+    return previousCount - this.data.length;
   }
 };
 

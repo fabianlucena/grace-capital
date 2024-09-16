@@ -25,8 +25,6 @@ function filter2SQL(filter, options) {
     keys = Object.keys(filter),
     total = symbols.length + keys.length;
   if (total > 1) {
-    console.log(filter);
-    
     throw Error('Invalid filter, multiple properties in filter.');
   } else if (!total) {
     throw Error('Invalid filter, no properties in filter.');

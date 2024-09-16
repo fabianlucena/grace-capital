@@ -67,8 +67,14 @@ export default function PurposesScreen({navigation}) {
     });
   }
 
-  async function setIsCompletedForId(id, isCompleted) {
-    await purposesService.updateForId(id, {isCompleted});
+  async function setIsCompletedForId(id, isAccomplished) {
+    //await purposesService.updateForId(id, {isCompleted});
+    if (isAccomplished) {
+      await purposesService.addAccomplishmentForIdAndDate(id, date);
+    } else {
+      await purposesService.deleteAccomplishmentForIdAndDate(id, date);
+    }
+
     load();
   }
 
@@ -97,7 +103,8 @@ export default function PurposesScreen({navigation}) {
           renderItem={({item}) => (
             <View style={styles.listItem}>
               <Text style={{ flexGrow: 1 }}>{item.title}</Text>
-              <Switch value={item.accomplishments.length} onValueChange={() => setIsCompletedForId(item.id, !item.isCompleted)}/>
+              <Text style={{ flexGrow: 1 }}>{item.description}</Text>
+              <Switch value={!!(item.accomplishments?.length)} onValueChange={() => setIsCompletedForId(item.id, !(item.accomplishments?.length))}/>
               <EditButtonIcon onPress={() => editForId(item.id)} />
               <DeleteButtonIcon onPress={() => deleteForId(item.id)} />
             </View>

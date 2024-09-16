@@ -7,12 +7,14 @@ class Service {
     this.model = model;
   }
 
+  init() {}
+
   async create(data) {
     if (!data) {
       return;
     }
     
-    if (!data.uuid) {
+    if (this.useUuid && !data.uuid) {
       data.uuid = uuid.v4();
     }
 
@@ -20,7 +22,7 @@ class Service {
   }
 
   async getList(options) {
-    const list = await this.model.getList(options);
+    let list = await this.model.getList(options);
     if (!list.length) {
       return list;
     }
@@ -57,7 +59,7 @@ class Service {
 
         const include = options.include[name];
 
-        await Promise.all(list.map(async item => {
+        list = await Promise.all(list.map(async item => {
           const filtersItems = [{[foreignKey]: item[key]}];
           if (include.filters) {
             filtersItems.push(include.filters);
@@ -66,7 +68,7 @@ class Service {
           const filters = { [Op.and]: filtersItems };
           const children = await service.getList({ filters });
 
-          item[name] = children;
+          return {...item, [name]: children};
         }));
       }
     }
@@ -82,12 +84,20 @@ class Service {
     return this.model.getSingleOrNullFor({id});
   }
 
+  async updateFor(filters, data) {
+    return this.model.updateFor(filters, data);
+  }
+
   async updateForId(id, data) {
-    return this.model.updateFor({id}, data);
+    return this.updateFor({id}, data);
+  }
+
+  async deleteFor(filters) {
+    return this.model.deleteFor(filters);
   }
 
   async deleteForId(id) {
-    return this.model.deleteFor({id});
+    return this.deleteId({id});
   }
 };
 

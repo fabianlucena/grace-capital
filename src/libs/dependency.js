@@ -37,6 +37,10 @@ export async function init() {
     purposesService: new PurposesService(purposesRepo),
     accomplishmentsService: new AccomplishmentsService(accomplishmentsRepo),
   };
+
+  dependencies.optionsService.init();
+  dependencies.purposesService.init();
+  dependencies.accomplishmentsService.init();
 }
 
 export default function getDependency(name) {
