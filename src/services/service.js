@@ -97,7 +97,7 @@ class Service {
   }
 
   async deleteForId(id) {
-    return this.deleteId({id});
+    return this.deleteFor({id});
   }
 };
 

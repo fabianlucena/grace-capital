@@ -14,7 +14,7 @@ class AccomplishmentsSQLite extends SQLite {
   arrangeDataToSave(row) {
     row = {...row};
     if (row.date instanceof Date) {
-      row.date = dateFormat(date, '%FT%T.%fZ%z');
+      row.date = dateFormat(row.date, '%FT%T.%fZ%z');
     }
 
     return row;

@@ -15,7 +15,9 @@ import Op from '../libs/operators';
 import FiltersButtonIcon from '../components/FiltersButtonIcon';
 
 export default function PurposesScreen({navigation}) {
-  const today = (new Date).toISOString().split('T')[0];
+  const todayDate = new Date;
+  todayDate.setMinutes(todayDate.getMinutes() - todayDate.getTimezoneOffset());
+  const today = todayDate.toISOString().split('T')[0];
   const isFocused = useIsFocused();
   const [purposesService, setPurposesService] = useState();
   const [date, setDate] = useState('');
@@ -38,7 +40,7 @@ export default function PurposesScreen({navigation}) {
       ],
     }: null;
 
-    const purposes = await purposesService.getListFor(
+    let purposes = await purposesService.getListFor(
       filters,
       {
         include: {
@@ -54,6 +56,8 @@ export default function PurposesScreen({navigation}) {
       },
     );
 
+    purposes = purposes.map(purpose => ({...purpose, isCompleted: !!purpose.accomplishments?.length}));
+    
     setPurposes(purposes);
   }
 
@@ -72,12 +76,15 @@ export default function PurposesScreen({navigation}) {
     });
   }
 
-  async function setIsCompletedForId(id, isAccomplished) {
-    if (isAccomplished) {
-      await purposesService.addAccomplishmentForIdAndDate(id, new Date);
+  async function setIsCompletedForId(purpose) {
+    if (purpose.isCompleted) {
+      await purposesService.deleteAccomplishmentForIdAndDate(purpose.id, date);
     } else {
-      await purposesService.deleteAccomplishmentForIdAndDate(id, today);
+      await purposesService.addAccomplishmentForIdAndDate(purpose.id, new Date);
     }
+
+    const isCompleted = !purpose.isCompleted;
+    setPurposes(purposes.map(p => p.id == purpose.id? {...p, isCompleted}: p ));
 
     load();
   }
@@ -110,7 +117,7 @@ export default function PurposesScreen({navigation}) {
             <View style={styles.listItem}>
               <Text style={{ flexGrow: 1 }}>{item.title}</Text>
               <Text style={{ flexGrow: 1 }}>{item.description}</Text>
-              <Switch value={!!(item.accomplishments?.length)} onValueChange={() => setIsCompletedForId(item.id, !(item.accomplishments?.length))}/>
+              <Switch value={item.isCompleted} onValueChange={() => setIsCompletedForId(item)}/>
               <EditButtonIcon onPress={() => editForId(item.id)} />
               <DeleteButtonIcon onPress={() => deleteForId(item.id)} />
             </View>

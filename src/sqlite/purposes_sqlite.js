@@ -26,20 +26,6 @@ class PurposesSQLite extends SQLite {
 
     return row;
   }
-
-  arrangeLoadedData(row) {
-    row = {...row};
-    
-    if (!(row.fromDate instanceof Date)) {
-      row.fromDate = new Date(row.fromDate + 'T00:00:00.00');
-    }
-    
-    if (!(row.toDate instanceof Date)) {
-      row.toDate = new Date(row.toDate + 'T00:00:00.00');
-    }
-
-    return row;
-  }
 }
 
 export default PurposesSQLite;

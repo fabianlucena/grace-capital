@@ -13,6 +13,10 @@ class SQLite {
     await this.createTable();
   }
 
+  debug(...args) {
+    console.log(...args);
+  }
+
   arrangeDataToSave(row) {
     return {...row};
   }
@@ -25,7 +29,7 @@ class SQLite {
     const columns = [];
     for (const name in this.columns) {
       const column = this.columns[name];
-      let definition = `${name} ${column.type}`;
+      let definition = `"${name}" ${column.type}`;
       
       if (column.primaryKey) {
         definition += ' PRIMARY KEY';
@@ -38,12 +42,12 @@ class SQLite {
       columns.push(definition);
     }
 
-    const sql = `CREATE TABLE IF NOT EXISTS ${this.tableName} (${columns.join(',')});`;
+    const sql = `CREATE TABLE IF NOT EXISTS "${this.tableName}" (${columns.join(',')});`;
     await this.db.execAsync(sql);
   }
 
   async dropTable() {
-    const sql = `DROP TABLE IF EXISTS ${this.tableName};`
+    const sql = `DROP TABLE IF EXISTS "${this.tableName}";`
     await this.db.execAsync(sql);
   }
 
@@ -58,9 +62,13 @@ class SQLite {
       values.push(data[c]);
     }
 
-    const sql = `INSERT INTO ${this.tableName} (${columns.join(',')}) VALUES (${questions.join(',')})`;
+    if (!columns.length) {
+      throw new Error('No data to create');
+    }
 
-    console.log(sql, ...values);
+    const sql = `INSERT INTO "${this.tableName}" ("${columns.join('","')}") VALUES (${questions.join(',')})`;
+
+    this.debug(sql, values);
 
     const result = await this.db.runAsync(sql, ...values);
 
@@ -98,13 +106,17 @@ class SQLite {
 
   async getList(options) {
     const [where, ...whereValues] = this.getWhereFromFilters(options?.filters),
-      sql = `SELECT * FROM ${this.tableName} ${where ?? ''}`;
+      sql = `SELECT * FROM "${this.tableName}" ${where ?? ''}`;
       
-    console.log(sql, ...whereValues);
+    this.debug(sql, whereValues);
 
     let list = await this.db.getAllAsync(sql, ...whereValues);
     list = list.map(this.arrangeLoadedData);
     return list;
+  }
+
+  async getListFor(filters, options) {
+    return this.getList({...options, filters})
   }
 
   async getSingleOrNullFor(filters) {
@@ -124,26 +136,29 @@ class SQLite {
     const set = [],
       values = [];
     for (const c in data) {
-      set.push(`${c}=?`);
+      set.push(`"${c}"=?`);
       values.push(data[c]);
     }
 
     const [where, ...whereValues] = this.getWhereFromFilters(filters);
-    const result = await this.db.runAsync(
-      `UPDATE ${this.tableName} SET ${set.join(',')} ${where}`,
-      ...values,
-      ...whereValues,
-    );
+    const sql = `UPDATE "${this.tableName}" SET ${set.join(',')} ${where}`,
+      allValues = [...values, ...whereValues];
+
+    this.debug(sql, allValues);
+
+    const result = await this.db.runAsync(sql, allValues);
    
     return result.changes;
   }
 
   async deleteFor(filters) {
     const [where, ...whereValues] = this.getWhereFromFilters(filters);
-    const result = await this.db.runAsync(
-      `DELETE FROM ${this.tableName} ${where}`,
-      ...whereValues,
-    );
+
+    const sql = `DELETE FROM "${this.tableName}" ${where}`;
+   
+    this.debug(sql, whereValues);
+
+    const result = await this.db.runAsync(sql, ...whereValues);
    
     return result.changes;
   }
