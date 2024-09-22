@@ -10,7 +10,7 @@ class SQLite {
   }
 
   async init() {
-    await this.createTable();
+    await this.createTableIfNotExists();
   }
 
   debug(...args) {
@@ -25,7 +25,7 @@ class SQLite {
     return {...row};
   }
 
-  async createTable() {
+  async createTableIfNotExists() {
     const columns = [];
     for (const name in this.columns) {
       const column = this.columns[name];
@@ -106,11 +106,46 @@ class SQLite {
 
   async getList(options) {
     const [where, ...whereValues] = this.getWhereFromFilters(options?.filters),
-      sql = `SELECT * FROM "${this.tableName}" ${where ?? ''}`;
-      
-    this.debug(sql, whereValues);
+      sqlOptions = [],
+      values = [];
+    if (where) {
+      sqlOptions.push(where);
+      values.push(...whereValues);
+    }
 
-    let list = await this.db.getAllAsync(sql, ...whereValues);
+    if (options.orderBy) {
+      const orderByList = [];
+      for (let orderBy of options.orderBy) {
+        if (Array.isArray(orderBy)) {
+          if (orderBy.length > 1) {
+            orderBy = orderBy[0] + ' ' + orderBy[1];
+          } else {
+            orderBy = orderBy = orderBy[0] + ' ASC';
+          }
+        }
+
+        orderByList.push(orderBy);
+      }
+
+      sqlOptions.push(`ORDER BY ${orderByList.join(',')}`);
+    }
+
+    if (options.limit) {
+      sqlOptions.push(`LIMIT ${options.limit}`);
+    }
+
+    if (options.offset) {
+      sqlOptions.push(`OFFSET ${options.limit}`);
+    }
+
+    let sql = `SELECT * FROM "${this.tableName}"`;
+    if (sqlOptions.length) {
+      sql += ' ' + sqlOptions.join(' ');
+    }
+      
+    this.debug(sql, values);
+
+    let list = await this.db.getAllAsync(sql, ...values);
     list = list.map(this.arrangeLoadedData);
     return list;
   }
@@ -119,8 +154,8 @@ class SQLite {
     return this.getList({...options, filters})
   }
 
-  async getSingleOrNullFor(filters) {
-    const list = await this.getListFor(filters);
+  async getSingleOrNullFor(filters, options) {
+    const list = await this.getListFor(filters, options);
     if (!list?.length) {
       return;
     }

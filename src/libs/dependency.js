@@ -1,9 +1,9 @@
 let dependencies = {};
 
 export function addDependency(name, dependency) {
-  if (dependencies[name]) {
+  /*if (dependencies[name]) {
     throw new Error(`Dependency ${name} already exists.`);
-  }
+  }*/
 
   dependencies[name] = dependency;
 }
