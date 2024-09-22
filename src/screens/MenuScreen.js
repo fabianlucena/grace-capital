@@ -10,8 +10,8 @@ export default function MenuScreen({navigation}) {
         {/*<LocaleButton style={styles.button} onPress={() => navigation.navigate('Calendar')}  >Calendar  </LocaleButton>*/}
         <LocaleButton onPress={() => navigation.navigate('Purposes')}  >Purposes  </LocaleButton>
         {/*<LocaleButton style={styles.button} onPress={() => navigation.navigate('Capitalary')}>Capitalary<LocaleButton>*/}
-        <LocaleButton style={styles.button} onPress={() => navigation.navigate('Export')}    >Export</LocaleButton>
         <LocaleButton style={styles.button} onPress={() => navigation.navigate('Prayers')}   >Prayers</LocaleButton>
+        <LocaleButton style={styles.button} onPress={() => navigation.navigate('Export')}    >Export</LocaleButton>
       </View>
     </Background>
   );

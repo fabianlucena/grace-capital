@@ -2,11 +2,18 @@ import locale from './locale.es';
 
 export class Locale {
   _(text) {
-    if (typeof text !== 'string') {
+    if (typeof text !== 'string'
+      && typeof text !== 'symbol'
+    ) {
       return text;
     }
+
+    let index = text;
+    if (typeof index === 'string') {
+      index = index.trim();
+    }
     
-    return locale?.translations[text.trim()] ?? text;
+    return locale?.translations[index] ?? text;
   }
 
   dateFormat(date, format) {
