@@ -1,15 +1,12 @@
 import { Platform, Alert } from 'react-native';
 import { _ } from './locale';
 
-export function confirm({title = _`Confirm`, message = _`Do you want to confirm?`, onOk, onCancel}) {
+export function alert({title = _`Alert`, message, onOk}) {
   if (Platform.OS === 'web') {
-    if (window.confirm(message, title)) {
+    console.log(message);
+    if (window.alert(message, title)) {
       if (onOk) {
         onOk();
-      }
-    } else {
-      if (onCancel) {
-        onCancel();
       }
     }
   }
@@ -21,10 +18,6 @@ export function confirm({title = _`Confirm`, message = _`Do you want to confirm?
       {
         text: _`Ok`,
         onPress: onOk,
-      },
-      {
-        text: _`Cancel`,
-        onPress: onCancel,
       },
     ]
   );

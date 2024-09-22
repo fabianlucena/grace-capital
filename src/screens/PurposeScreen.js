@@ -6,6 +6,8 @@ import Background from '../components/Background';
 import getDependency from '../libs/dependency';
 import LocaleTextField from '../components/LocaleTextField';
 import LocaleDateField from '../components/LocaleDateField';
+import { alert } from '../libs/alert';
+import { _ } from '../libs/locale';
 
 export default function PurposeScreen({navigation, route}) {
   const today = (new Date).toISOString().split('T')[0];
@@ -43,6 +45,12 @@ export default function PurposeScreen({navigation, route}) {
   }
 
   async function savePurpose() {
+    if (!title) {
+      alert({message: _`Purpose dos not have title`});
+
+      return;
+    }
+
     const data = {
       title,
       description,

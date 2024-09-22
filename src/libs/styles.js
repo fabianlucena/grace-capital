@@ -51,6 +51,10 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
 
+  smallText: {
+    fontSize: 18,
+  },
+
   input: {
     fontSize: 26,
     borderBottomWidth: 2,

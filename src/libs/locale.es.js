@@ -3,10 +3,12 @@ import prayers from './prayers';
 export default {
   translations: {
     'Add':                        'Agregar',
+    'Alert':                      'Alert',
     'Calendar':                   'Calendario',
     'Cancel':                     'Cancelar',
     'Capitalary':                 'Capitalario',
     'Confirm':                    'Confirmar',
+    'Confirm purpose deletion?':  '¿Confirma le eliminación del propósito?',
     'Description':                'Descripción',
     'Do you want to confirm?':    '¿Desea confirmar?',
     'Error, prayer %s not found': 'Error, oración no encontrada',
@@ -17,6 +19,7 @@ export default {
     'Prayer':                     'Oración',
     'Prayers':                    'Oraciones',
     'Purpose':                    'Propósito',
+    'Purpose dos not have title': 'El propósito no tiene título',
     'Purposes':                   'Propósitos',
     'Purposes list':              'Lista de propósitos',
     'To':                         'Hasta',

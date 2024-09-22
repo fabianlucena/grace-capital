@@ -13,6 +13,7 @@ import getDependency from '../libs/dependency';
 import DateInput from '../components/DateInput';
 import Op from '../libs/operators';
 import FiltersButtonIcon from '../components/FilterButtonIcon';
+import { _ } from '../libs/locale';
 
 export default function PurposesScreen({navigation}) {
   const todayDate = new Date;
@@ -67,8 +68,7 @@ export default function PurposesScreen({navigation}) {
 
   function deleteForId(id) {
     confirm({
-      title: 'Confirma',
-      message: 'Confirma la eliminación del propósito',
+      message: _`Confirm purpose deletion`,
       onOk: async () => {
         await purposesService.deleteForId(id);
         load();
@@ -115,8 +115,8 @@ export default function PurposesScreen({navigation}) {
           keyExtractor={item => item.id}
           renderItem={({item}) => (
             <View style={styles.listItem}>
-              <Text style={{ flexGrow: 1 }}>{item.title}</Text>
-              <Text style={{ flexGrow: 1 }}>{item.description}</Text>
+              <Text style={{...styles.text, flexGrow: 1}}>{item.title}</Text>
+              <Text style={{...styles.smallText, flexGrow: 1}}>{item.description}</Text>
               <Switch value={item.isCompleted} onValueChange={() => setIsCompletedForId(item)}/>
               <EditButtonIcon onPress={() => editForId(item.id)} />
               <DeleteButtonIcon onPress={() => deleteForId(item.id)} />
