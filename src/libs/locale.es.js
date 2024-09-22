@@ -37,8 +37,8 @@ como también nosotros perdonamos a los que nos ofenden,
 no nos dejes caer en la tentación,
 líbranos del mal.`,
     [prayers.get('Little Consecration').prayer]:
-`Oh, Señora mía, oh Madre mÍa,
-yo me ofrezco todo a Ti,
+`Oh, Señora mía, oh Madre mía,
+yo me ofrezco todo a ti,
 y en prueba de mi filial afecto
 te consagro en este día:
 mis ojos, mis oídos, mi lengua, mi corazón,

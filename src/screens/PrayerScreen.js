@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import styles from '../libs/styles';
 import Background from '../components/Background';
 import LocaleText from '../components/LocaleText';
@@ -24,9 +24,11 @@ export default function PrayerScreen({route, navigation}) {
 
   return (
     <Background>
-      <View style={styles.container}>
-        <LocaleText>{prayerTitle}</LocaleText>
-        <LocaleText>{prayerBody}</LocaleText>
+      <View style={{...styles.container, justifyContent: 'top'}}>
+        <LocaleText style={styles.prayerTitle}>{prayerTitle}</LocaleText>
+        <ScrollView>
+          <LocaleText style={styles.prayer}>{prayerBody}</LocaleText>
+        </ScrollView> 
       </View>
     </Background>
   );

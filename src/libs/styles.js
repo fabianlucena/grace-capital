@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
 
   background: {
     flexGrow: 1,
+    flexShrink: 1,
   },
 
   button: {
@@ -141,6 +142,17 @@ const styles = StyleSheet.create({
 
   disabled:  {
     color: '#808080',
+  },
+
+  prayer:  {
+    fontSize: 22,
+  },
+
+  prayerTitle:  {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginTop: 8,
+    marginBottom: 15,
   },
 });
 
