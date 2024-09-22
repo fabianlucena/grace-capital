@@ -1,8 +1,8 @@
 import ButtonIcon from './ButtonIcon';
 import { _ } from '../libs/locale';
-import filtersIcon from '../images/filters.png';
+import filtersIcon from '../images/filter.png';
 
-export default function FiltersButtonIcon({style, onPress}) {
+export default function FilterButtonIcon({style, onPress}) {
   return (
     <ButtonIcon 
       onPress={onPress}

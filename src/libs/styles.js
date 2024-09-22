@@ -6,6 +6,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexGrow: 1,
+    flexDirection: 'column',
+    padding: 10,
   },
 
   topBar: {
@@ -26,6 +28,11 @@ const styles = StyleSheet.create({
     padding: 3,
     paddingHorizontal: 5,
     margin: 5,
+    width: '100%',
+  },
+
+  textButton: {
+    textAlign: 'center',
   },
 
   presed: {
@@ -39,7 +46,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  text: {
+    fontSize: 26,
+  },
+
   input: {
+    fontSize: 26,
     borderBottomWidth: 2,
     borderBottomColor: '#404040',
     borderRadius: 2,
@@ -72,7 +84,6 @@ const styles = StyleSheet.create({
 
   list: {
     width: '100%',
-    padding: 4,
   },
 
   listItem: {
@@ -117,9 +128,20 @@ const styles = StyleSheet.create({
 
   label: {
     color: '#606060',
-    fontSize: 12,
+    fontSize: 20,
     fontWeight: 'bold',
-  }
+  },
+
+  sameLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+
+  disabled:  {
+    color: '#808080',
+  },
 });
 
 export default styles;

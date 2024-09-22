@@ -10,6 +10,10 @@ export class Locale {
   }
 
   dateFormat(date, format) {
+    if (!date) {
+      return '';
+    }
+
     let result = '';
 
     for (let i = 0; i < format.length; i++) {

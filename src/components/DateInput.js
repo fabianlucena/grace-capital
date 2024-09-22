@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Platform, Pressable, Text } from 'react-native';
 import { dateFormat } from '../libs/locale';
+import styles from '../libs/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function DateInput({date, mode = 'date', valueType = 'date', style, onChange}) {
+export default function DateInput({date, mode = 'date', valueType = 'date', style, onChange, disabled}) {
   const [isSelectDateShowing, setIsSelectDateShowing] = useState(false);
 
   mode = mode.toLowerCase();
@@ -21,7 +22,7 @@ export default function DateInput({date, mode = 'date', valueType = 'date', styl
   }
 
   function selectDate() {
-    setIsSelectDateShowing(true);
+    setIsSelectDateShowing((!disabled) && true);
   }
 
   function getISOString(date) {
@@ -35,6 +36,10 @@ export default function DateInput({date, mode = 'date', valueType = 'date', styl
   }
 
   function getDate(date) {
+    if (!date) {
+      return;
+    }
+
     if (mode === 'date') {
       if (typeof date === 'string') {
         date = date.split('T')[0];
@@ -49,6 +54,7 @@ export default function DateInput({date, mode = 'date', valueType = 'date', styl
   }
 
   function onChangeHandler(event, newDate) {
+    setIsSelectDateShowing(false);
     if (onChange) {
       if (mode === 'date') {
         date = getISOString(newDate);
@@ -57,14 +63,14 @@ export default function DateInput({date, mode = 'date', valueType = 'date', styl
       date = newDate;
       onChange(event, date);
     }
-
-    setIsSelectDateShowing(false);
   }
   
   function picker() {
     if (!isSelectDateShowing) {
       return;
     }
+
+    console.log(style);
 
     return Platform.OS === 'web'?
     (
@@ -88,7 +94,7 @@ export default function DateInput({date, mode = 'date', valueType = 'date', styl
     <Pressable
       onPress={selectDate}
     >
-      <Text>{dateFormat(date, '%D')}</Text>
+      <Text style={{...styles.input, ...styles.text, ...style}}>{dateFormat(date, '%D')}</Text>
       {picker()}
     </Pressable>
   );

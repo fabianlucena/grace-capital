@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, FlatList, Text, Switch, Pressable } from 'react-native';
+import { View, FlatList, Text, Switch } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../libs/styles';
 import { confirm } from '../libs/confirm';
@@ -12,7 +12,7 @@ import RightButtonIcon from '../components/RightButtonIcon';
 import getDependency from '../libs/dependency';
 import DateInput from '../components/DateInput';
 import Op from '../libs/operators';
-import FiltersButtonIcon from '../components/FiltersButtonIcon';
+import FiltersButtonIcon from '../components/FilterButtonIcon';
 
 export default function PurposesScreen({navigation}) {
   const todayDate = new Date;
@@ -33,10 +33,10 @@ export default function PurposesScreen({navigation}) {
 
   async function load() {
     const filters = isFiltered? {
-      fromDate: { [Op.ge]: date },
+      fromDate: { [Op.le]: date },
       [Op.or]: [
         {toDate: null},
-        {toDate: {[Op.le]: date}},
+        {toDate: {[Op.ge]: date}},
       ],
     }: null;
 

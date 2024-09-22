@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, Pressable, Text, TextInput } from 'react-native';
+import { View } from 'react-native';
 import styles from '../libs/styles';
-import LocaleText from '../components/LocaleText';
+import LocaleButton from '../components/LocaleButton';
 import Background from '../components/Background';
-import Field from '../components/Field';
 import getDependency from '../libs/dependency';
-import DateInput from '../components/DateInput';
+import LocaleTextField from '../components/LocaleTextField';
+import LocaleDateField from '../components/LocaleDateField';
 
 export default function PurposeScreen({navigation, route}) {
   const today = (new Date).toISOString().split('T')[0];
@@ -14,7 +14,7 @@ export default function PurposeScreen({navigation, route}) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [fromDate, setFromDate] = useState(today);
-  const [toDate, setToDate] = useState(today);
+  const [toDate, setToDate] = useState(null);
 
   useEffect(() => {
     setPurposesService(getDependency('purposesService'));
@@ -62,48 +62,37 @@ export default function PurposeScreen({navigation, route}) {
   return (
     <Background>
       <View style={styles.container}>
-        <Field style={styles.field}>
-          <LocaleText style={styles.label}>Title</LocaleText>
-          <TextInput
-            style={styles.input}
-            value={title}
-            onChangeText={setTitle}
-          />
-        </Field>
-        <Field style={styles.field}>
-          <LocaleText style={styles.label}>Description</LocaleText>
-          <TextInput
-            style={styles.input}
-            value={description}
-            onChangeText={setDescription}
-          />
-        </Field>
-        <Field style={styles.field}>
-          <LocaleText style={styles.label}>From</LocaleText>
-          <DateInput
-            style={styles.input}
-            mode="date"
-            date={fromDate}
-            valueType="text"
-            onChange={(_, date) => setFromDate(date)}
-          />
-        </Field>
-        <Field style={styles.field}>
-          <LocaleText style={styles.label}>To</LocaleText>
-          <DateInput
-            style={styles.input}
-            mode="date"
-            date={toDate}
-            valueType="text"
-            onChange={(_, date) => setToDate(date)}
-          />
-        </Field>
-        <Pressable style={styles.button} onPress={savePurpose}  >
-          <LocaleText>{id? 'Update': 'Add'}</LocaleText>
-        </Pressable>
-        <Pressable style={styles.button} onPress={() => navigation.goBack()}  >
-          <LocaleText>Cancel</LocaleText>
-        </Pressable>
+        <LocaleTextField
+          value={title}
+          onChangeValue={setTitle}
+        >
+          Title
+        </LocaleTextField>
+        <LocaleTextField
+          value={description}
+          onChangeValue={setDescription}
+        >
+          Description
+        </LocaleTextField>
+        <LocaleDateField
+          mode="date"
+          valueType="text"
+          value={fromDate}
+          onChangeValue={setFromDate}
+        >
+          From
+        </LocaleDateField>
+        <LocaleDateField
+          mode="date"
+          valueType="text"
+          value={toDate}
+          onChangeValue={setToDate}
+          nullable={true}
+        >
+          To
+        </LocaleDateField>
+        <LocaleButton onPress={savePurpose}  >{id? 'Update': 'Add'}</LocaleButton>
+        <LocaleButton onPress={() => navigation.goBack()}  >Cancel</LocaleButton>
       </View>
     </Background>
   );
