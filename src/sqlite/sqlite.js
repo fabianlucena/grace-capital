@@ -105,37 +105,40 @@ class SQLite {
   }
 
   async getList(options) {
-    const [where, ...whereValues] = this.getWhereFromFilters(options?.filters),
-      sqlOptions = [],
+    const sqlOptions = [],
       values = [];
-    if (where) {
-      sqlOptions.push(where);
-      values.push(...whereValues);
-    }
 
-    if (options.orderBy) {
-      const orderByList = [];
-      for (let orderBy of options.orderBy) {
-        if (Array.isArray(orderBy)) {
-          if (orderBy.length > 1) {
-            orderBy = orderBy[0] + ' ' + orderBy[1];
-          } else {
-            orderBy = orderBy = orderBy[0] + ' ASC';
+    if (options) {  
+      const [where, ...whereValues] = this.getWhereFromFilters(options?.filters);
+      if (where) {
+        sqlOptions.push(where);
+        values.push(...whereValues);
+      }
+  
+      if (options.orderBy) {
+        const orderByList = [];
+        for (let orderBy of options.orderBy) {
+          if (Array.isArray(orderBy)) {
+            if (orderBy.length > 1) {
+              orderBy = orderBy[0] + ' ' + orderBy[1];
+            } else {
+              orderBy = orderBy = orderBy[0] + ' ASC';
+            }
           }
+
+          orderByList.push(orderBy);
         }
 
-        orderByList.push(orderBy);
+        sqlOptions.push(`ORDER BY ${orderByList.join(',')}`);
       }
 
-      sqlOptions.push(`ORDER BY ${orderByList.join(',')}`);
-    }
+      if (options.limit) {
+        sqlOptions.push(`LIMIT ${options.limit}`);
+      }
 
-    if (options.limit) {
-      sqlOptions.push(`LIMIT ${options.limit}`);
-    }
-
-    if (options.offset) {
-      sqlOptions.push(`OFFSET ${options.limit}`);
+      if (options.offset) {
+        sqlOptions.push(`OFFSET ${options.limit}`);
+      }
     }
 
     let sql = `SELECT * FROM "${this.tableName}"`;
