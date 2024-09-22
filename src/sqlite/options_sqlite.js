@@ -16,6 +16,7 @@ class OptionsSQLite extends SQLite {
   async init() {
     await super.init();
     const list = await this.getList({
+      where: {name: 'DB version'},
       orderBy: [['date', 'DESC']],
       limit: 1,
     });

@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Share } from 'react-native';
 import styles from '../libs/styles';
 import Background from '../components/Background';
 import getDependency from '../libs/dependency';
+import LocaleButton from '../components/LocaleButton';
+import { _ } from '../libs/locale';
 
 export default function ExportScreen() {
   const [content, setContent] = useState({});
@@ -27,13 +29,30 @@ export default function ExportScreen() {
       });
   }, []);
 
+  async function share() {
+    try {
+      await Share.share({
+        title: _`Grace Capital personal data`,
+        mesage: content,
+        url: 'data://' + content,
+        type: 'text/plain',
+        subject: _`Grace Capital personal data`, //  for email
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   return (
     <Background>
-      <ScrollView >
-        <Text>
-          {JSON.stringify(content, null, '  ')}
-        </Text>
-      </ScrollView>
+      <View style={styles.container}>
+        {/*<LocaleButton onPress={share}>Share</LocaleButton>*/}
+        <ScrollView >
+          <Text>
+            {JSON.stringify(content, null, '  ')}
+          </Text>
+        </ScrollView>
+      </View>
     </Background>
   );
 }

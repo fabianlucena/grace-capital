@@ -108,11 +108,15 @@ class SQLite {
     const sqlOptions = [],
       values = [];
 
-    if (options) {  
-      const [where, ...whereValues] = this.getWhereFromFilters(options?.filters);
-      if (where) {
-        sqlOptions.push(where);
-        values.push(...whereValues);
+    if (options) {
+      if (options.filters || options.where) {
+        const [where, ...whereValues] = this.getWhereFromFilters(
+          {...options.filters, ...options.where}
+        );
+        if (where) {
+          sqlOptions.push(where);
+          values.push(...whereValues);
+        }
       }
   
       if (options.orderBy) {
